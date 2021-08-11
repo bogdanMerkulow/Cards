@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="64dp"
     android:layout_height="82dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#6D4C35">
 
         <ImageView
             android:id="@+id/imageView"
@@ -20,14 +20,13 @@
 
         <TextView
             android:id="@+id/card_lvl"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:translationZ="2dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:text="2"
-            android:textSize="7sp"
-            android:textColor="@color/white"
             android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:translationZ="2dp"
             app:layout_constraintEnd_toEndOf="@+id/imageView"
             app:layout_constraintStart_toStartOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="@+id/imageView" />
