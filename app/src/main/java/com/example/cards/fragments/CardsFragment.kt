@@ -14,7 +14,6 @@ import com.example.cards.databinding.CardsFragmentBinding
 import com.example.cards.factories.CardViewHolderFactory
 import com.example.cards.models.Card
 
-
 class CardsFragment : Fragment() {
     private lateinit var adapter: RecyclerViewAdapter<Card>
     private var _binding: CardsFragmentBinding? = null
