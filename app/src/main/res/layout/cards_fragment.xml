@@ -33,6 +33,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
+            android:id="@+id/cost_line"
+            android:visibility="invisible"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_marginStart="25dp"
@@ -54,6 +56,7 @@
                 android:textSize="11sp" />
 
             <TextView
+                android:id="@+id/average_cost"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:fontFamily="@font/supercellmagic"

@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,11 +32,14 @@ class CardsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val cardList: RecyclerView = binding.rwCardList
         val randomButton: Button = binding.randomButton
+        val averageCost: TextView = binding.averageCost
+        val costLine = binding.costLine
         cardList.layoutManager = GridLayoutManager(context, 4)
 
         randomButton.setOnClickListener {
             viewModel.getNewShuffledData()
             randomButton.isEnabled = false
+            costLine.isVisible = false
         }
 
         adapter = RecyclerViewAdapter(
@@ -50,6 +55,11 @@ class CardsFragment : Fragment() {
 
         viewModel.loadedComplete.observe(viewLifecycleOwner) { isComplete ->
             randomButton.isEnabled = isComplete
+            costLine.isVisible = isComplete
+        }
+
+        viewModel.averageCost.observe(viewLifecycleOwner) { cost ->
+            averageCost.text = cost.toString()
         }
     }
 
