@@ -31,14 +31,14 @@ class CardViewModel(application: Application) :  AndroidViewModel(application)  
             val ctx = getApplication<Application>().applicationContext
             var iconsList = mutableListOf<Int>()
 
-            for (i in 0..82) {
+            for (i in 0..ICONS_COUNT) {
                 val iconId = ctx.resources.getIdentifier("icon$i", "drawable", ctx.packageName)
                 iconsList.add(iconId)
             }
 
             iconsList = iconsList.shuffled() as MutableList<Int>
 
-            for (i in 1..8) {
+            for (i in 1..CARDS_COUNT) {
                 val randomLvl = Random.nextInt(1, 10)
                 testData.add(Card(randomLvl, iconsList[i]))
             }
@@ -47,11 +47,14 @@ class CardViewModel(application: Application) :  AndroidViewModel(application)  
                 cost += card.lvl
             }
 
-            Thread.sleep(1000)
-
             _averageCost.postValue(cost)
             _data.postValue(testData.shuffled())
             _loadedComplete.postValue(true)
         }
+    }
+
+    companion object {
+        private const val ICONS_COUNT: Int = 82
+        private const val CARDS_COUNT: Int = 8
     }
 }
