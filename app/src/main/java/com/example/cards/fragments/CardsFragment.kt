@@ -19,13 +19,14 @@ import com.example.cards.models.Card
 import com.example.cards.viewmodels.CardViewModel
 
 class CardsFragment : Fragment() {
-    private val viewModel: CardViewModel = CardViewModel()
+    private lateinit var viewModel: CardViewModel
     private lateinit var adapter: RecyclerViewAdapter<Card>
     private var _binding: CardsFragmentBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel = CardViewModel(requireActivity().application)
         _binding = CardsFragmentBinding.inflate(layoutInflater)
     }
 

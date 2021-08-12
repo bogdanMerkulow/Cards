@@ -29,7 +29,7 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
                 true
             }
 
-            image.setImageResource(R.drawable.item13)
+            image.setImageResource(data.image)
 
             /*Glide
                 .with(itemView)
