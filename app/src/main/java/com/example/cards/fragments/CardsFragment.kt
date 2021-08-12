@@ -1,5 +1,6 @@
 package com.example.cards.fragments
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -36,7 +37,7 @@ class CardsFragment : Fragment() {
         binding.randomButton.setOnClickListener {
             viewModel.getNewShuffledData()
             binding.randomButton.isEnabled = false
-            binding.costLine.isVisible = false
+            binding.deck.isVisible = false
         }
 
         adapter = RecyclerViewAdapter(
@@ -61,7 +62,7 @@ class CardsFragment : Fragment() {
 
     private fun setLoader(isComplete: Boolean) {
         binding.randomButton.isEnabled = isComplete
-        binding.costLine.isVisible = isComplete
+        binding.deck.isVisible = isComplete
     }
 
     private fun setAverage(average: Average) {
