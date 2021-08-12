@@ -26,13 +26,12 @@ class CardViewModel: ViewModel()  {
     fun getNewShuffledData() {
         viewModelScope.launch(Dispatchers.IO) {
             val testData = mutableListOf<Card>()
+            var cost = 0
 
             for (i in 1..8) {
                 val randomLvl = Random.nextInt(1, 10)
                 testData.add(Card(randomLvl, ""))
             }
-
-            var cost = 0
 
             testData.forEach{ card ->
                 cost += card.lvl

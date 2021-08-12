@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 class RecyclerViewAdapter<T>(
     private val viewHolderFactory: ViewHolderFactory<T>,
     private val layoutId: Int,
-    private val listener: (T) -> Unit = {}
+    private val listener: (T) -> Unit = {},
+    private val dragAndDropListener: (Unit) -> Unit = {}
 ) : RecyclerView.Adapter<ViewHolder<T>>() {
 
     private var items: List<T> = listOf()
@@ -27,7 +28,7 @@ class RecyclerViewAdapter<T>(
     }
 
     override fun onBindViewHolder(holder: ViewHolder<T>, position: Int) {
-        holder.bind(items[position], listener)
+        holder.bind(items[position], listener, dragAndDropListener)
     }
 
     override fun getItemCount(): Int {

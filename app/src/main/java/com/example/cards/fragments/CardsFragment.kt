@@ -1,6 +1,7 @@
 package com.example.cards.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,6 +46,8 @@ class CardsFragment : Fragment() {
         adapter = RecyclerViewAdapter(
             CardViewHolderFactory(),
             R.layout.card_item,
+            {Log.e("test123", "click")},
+            {Log.e("test123", "long click")}
         )
 
         cardList.adapter = adapter
