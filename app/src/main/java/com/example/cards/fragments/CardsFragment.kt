@@ -1,13 +1,9 @@
 package com.example.cards.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,6 +12,7 @@ import com.example.cards.R
 import com.example.cards.adapters.RecyclerViewAdapter
 import com.example.cards.databinding.CardsFragmentBinding
 import com.example.cards.factories.CardViewHolderFactory
+import com.example.cards.models.Average
 import com.example.cards.models.Card
 import com.example.cards.viewmodels.CardViewModel
 
@@ -34,23 +31,17 @@ class CardsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val cardList: RecyclerView = binding.rwCardList
-        val randomButton: Button = binding.randomButton
-        val averageCost: TextView = binding.averageCost
-        val averageElixir: ImageView = binding.totalElixir
-        val costLine = binding.costLine
         cardList.layoutManager = GridLayoutManager(context, 4)
 
-        randomButton.setOnClickListener {
+        binding.randomButton.setOnClickListener {
             viewModel.getNewShuffledData()
-            randomButton.isEnabled = false
-            costLine.isVisible = false
+            binding.randomButton.isEnabled = false
+            binding.costLine.isVisible = false
         }
 
         adapter = RecyclerViewAdapter(
             CardViewHolderFactory(),
-            R.layout.card_item,
-            {Log.e("test123", "click")},
-            {Log.e("test123", "long click")}
+            R.layout.card_item
         )
 
         cardList.adapter = adapter
@@ -60,14 +51,22 @@ class CardsFragment : Fragment() {
         }
 
         viewModel.loadedComplete.observe(viewLifecycleOwner) { isComplete ->
-            randomButton.isEnabled = isComplete
-            costLine.isVisible = isComplete
+            setLoader(isComplete)
         }
 
         viewModel.averageCost.observe(viewLifecycleOwner) { average ->
-            averageCost.text = average.cost.toString()
-            averageElixir.setImageResource(average.elixir)
+            setAverage(average)
         }
+    }
+
+    private fun setLoader(isComplete: Boolean) {
+        binding.randomButton.isEnabled = isComplete
+        binding.costLine.isVisible = isComplete
+    }
+
+    private fun setAverage(average: Average) {
+        binding.averageCost.text = average.cost.toString()
+        binding.totalElixir.setImageResource(average.elixir)
     }
 
     override fun onCreateView(

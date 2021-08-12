@@ -1,7 +1,10 @@
 package com.example.cards.viewmodels
 
 import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.cards.R
 import com.example.cards.models.Average
 import com.example.cards.models.Card
@@ -9,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
-class CardViewModel(application: Application) :  AndroidViewModel(application)  {
+class CardViewModel(application: Application) : AndroidViewModel(application) {
     private val _data: MutableLiveData<List<Card>> = MutableLiveData<List<Card>>()
     private val _loadedComplete: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     private val _averageCost: MutableLiveData<Average> = MutableLiveData<Average>()
@@ -25,13 +28,14 @@ class CardViewModel(application: Application) :  AndroidViewModel(application)  
 
     fun getNewShuffledData() {
         viewModelScope.launch(Dispatchers.IO) {
-            val testData = mutableListOf<Card>()
+            val cards = mutableListOf<Card>()
             val ctx = getApplication<Application>().applicationContext
             var iconsList = mutableListOf<Int>()
             val average = Average(0, 0)
 
             for (i in 0..ICONS_COUNT) {
-                val iconId = ctx.resources.getIdentifier("icon$i", "drawable", ctx.packageName)
+                val iconId =
+                    ctx.resources.getIdentifier("$ICON_PREFIX$i", DEF_TYPE, ctx.packageName)
                 iconsList.add(iconId)
             }
 
@@ -42,10 +46,10 @@ class CardViewModel(application: Application) :  AndroidViewModel(application)  
 
                 val elixir = getRare(cardLvl)
 
-                testData.add(Card(elixir, cardLvl, iconsList[i]))
+                cards.add(Card(elixir, cardLvl, iconsList[i]))
             }
 
-            testData.forEach{ card ->
+            cards.forEach { card ->
                 average.cost += card.lvl
             }
 
@@ -54,13 +58,13 @@ class CardViewModel(application: Application) :  AndroidViewModel(application)  
             average.elixir = getRare(average.cost)
 
             _averageCost.postValue(average)
-            _data.postValue(testData.shuffled())
+            _data.postValue(cards.shuffled())
             _loadedComplete.postValue(true)
         }
     }
 
     private fun getRare(value: Int): Int {
-        return when(value) {
+        return when (value) {
             in 1..2 -> R.drawable.elixir_common
             in 3..4 -> R.drawable.elixir_rare
             in 5..6 -> R.drawable.elixir_epic
@@ -70,6 +74,8 @@ class CardViewModel(application: Application) :  AndroidViewModel(application)  
     }
 
     companion object {
+        private const val DEF_TYPE = "drawable"
+        private const val ICON_PREFIX: String = "icon"
         private const val ICONS_COUNT: Int = 82
         private const val CARDS_COUNT: Int = 8
         private const val MIN_LVL_RARE: Int = 1
