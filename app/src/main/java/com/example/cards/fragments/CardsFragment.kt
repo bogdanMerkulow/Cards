@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -35,6 +36,7 @@ class CardsFragment : Fragment() {
         val cardList: RecyclerView = binding.rwCardList
         val randomButton: Button = binding.randomButton
         val averageCost: TextView = binding.averageCost
+        val averageElixir: ImageView = binding.totalElixir
         val costLine = binding.costLine
         cardList.layoutManager = GridLayoutManager(context, 4)
 
@@ -62,8 +64,9 @@ class CardsFragment : Fragment() {
             costLine.isVisible = isComplete
         }
 
-        viewModel.averageCost.observe(viewLifecycleOwner) { cost ->
-            averageCost.text = cost.toString()
+        viewModel.averageCost.observe(viewLifecycleOwner) { average ->
+            averageCost.text = average.cost.toString()
+            averageElixir.setImageResource(average.elixir)
         }
     }
 

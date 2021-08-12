@@ -14,12 +14,14 @@ import com.example.cards.adapters.ViewHolder
 import com.example.cards.models.Card
 
 class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
+    private val elixir: ImageView = itemView.findViewById(R.id.card_elixir)
     private val image: ImageView = itemView.findViewById(R.id.card_image)
     private val lvl: TextView = itemView.findViewById(R.id.card_lvl)
 
     override fun bind(data: Card, listener: (Card) -> Unit, dragAndDropListener: (Unit) -> Unit) {
         itemView.apply {
             lvl.text = data.lvl.toString()
+            elixir.setImageResource(data.rare)
             setOnClickListener {
                 listener(data)
             }
