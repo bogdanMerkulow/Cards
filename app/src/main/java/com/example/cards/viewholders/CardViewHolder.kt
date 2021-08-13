@@ -2,6 +2,7 @@ package com.example.cards.viewholders
 
 import android.view.View
 import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
 import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import android.widget.TextView
@@ -92,12 +93,37 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             override fun onAnimationRepeat(animation: Animation?) {}
         })
 
+        val fadeIn = ScaleAnimation(
+            -1f,
+            1f,
+            1f,
+            1f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        )
+
+        fadeIn.duration = 1000
+        fadeIn.fillAfter = true
+
         anim2.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {}
 
             override fun onAnimationEnd(animation: Animation?) {
                 elixir.visibility = View.VISIBLE
                 lvl.visibility = View.VISIBLE
+                itemView.startAnimation(fadeIn)
+            }
+
+            override fun onAnimationRepeat(animation: Animation?) {}
+
+        })
+
+        fadeIn.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation?) {}
+
+            override fun onAnimationEnd(animation: Animation?) {
                 image.setImageResource(data.image)
             }
 
