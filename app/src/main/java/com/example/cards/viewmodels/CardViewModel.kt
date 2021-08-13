@@ -57,6 +57,8 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
 
             average.elixir = getRare(average.cost)
 
+            Thread.sleep(1200)
+
             _averageCost.postValue(average)
             _data.postValue(cards.shuffled())
             _loadedComplete.postValue(true)
@@ -68,7 +70,7 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
             in 1..2 -> R.drawable.elixir_common
             in 3..4 -> R.drawable.elixir_rare
             in 5..6 -> R.drawable.elixir_epic
-            in 7..8 -> R.drawable.elixir_legendary
+            in 7..10 -> R.drawable.elixir_legendary
             else -> R.drawable.elixir_common
         }
     }
