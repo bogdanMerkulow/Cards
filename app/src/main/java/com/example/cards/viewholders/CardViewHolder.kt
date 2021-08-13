@@ -111,8 +111,6 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             override fun onAnimationStart(animation: Animation?) {}
 
             override fun onAnimationEnd(animation: Animation?) {
-                elixir.visibility = View.VISIBLE
-                lvl.visibility = View.VISIBLE
                 itemView.startAnimation(fadeIn)
             }
 
@@ -124,6 +122,8 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             override fun onAnimationStart(animation: Animation?) {}
 
             override fun onAnimationEnd(animation: Animation?) {
+                elixir.visibility = View.VISIBLE
+                lvl.visibility = View.VISIBLE
                 image.setImageResource(data.image)
             }
 
