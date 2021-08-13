@@ -2,13 +2,13 @@ package com.example.cards.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.Animation
 import androidx.recyclerview.widget.RecyclerView
 
 class RecyclerViewAdapter<T>(
     private val viewHolderFactory: ViewHolderFactory<T>,
     private val layoutId: Int,
     private val listener: (T) -> Unit = {},
-    private val dragAndDropListener: (Unit) -> Unit = {}
 ) : RecyclerView.Adapter<ViewHolder<T>>() {
 
     private var items: List<T> = listOf()
@@ -28,7 +28,7 @@ class RecyclerViewAdapter<T>(
     }
 
     override fun onBindViewHolder(holder: ViewHolder<T>, position: Int) {
-        holder.bind(items[position], listener, dragAndDropListener)
+        holder.bind(items[position], listener, position)
     }
 
     override fun getItemCount(): Int {

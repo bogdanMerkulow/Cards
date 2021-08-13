@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="64dp"
     android:layout_height="82dp"
+    android:background="#6D4C35"
     app:cardElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,6 +13,7 @@
 
         <ImageView
             android:id="@+id/card_elixir"
+            android:visibility="invisible"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:translationZ="1dp"
@@ -20,6 +22,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:visibility="invisible"
             android:id="@+id/card_lvl"
             android:layout_width="15dp"
             android:layout_height="15dp"
@@ -35,9 +38,8 @@
         <ImageView
             android:id="@+id/card_image"
             android:layout_width="match_parent"
-            android:layout_height="73dp"
-            android:layout_marginTop="5dp"
-            android:src="@drawable/icon0"
+            android:layout_height="match_parent"
+            android:src="@drawable/card_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

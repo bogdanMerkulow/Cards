@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,6 +24,7 @@ class CardsFragment : Fragment() {
     private lateinit var adapter: RecyclerViewAdapter<Card>
     private var _binding: CardsFragmentBinding? = null
     private val binding get() = _binding!!
+    private var firstStart: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,21 +34,24 @@ class CardsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val cardList: RecyclerView = binding.rwCardList
-        cardList.layoutManager = GridLayoutManager(context, 4)
+        binding.rwCardList.layoutManager = GridLayoutManager(context, 4)
+        val clearAnimation: Animation = AnimationUtils.loadAnimation(activity, R.anim.clear_deck_animation)
 
         binding.randomButton.setOnClickListener {
             viewModel.getNewShuffledData()
             binding.randomButton.isEnabled = false
-            binding.deck.isVisible = false
+            if (!firstStart)
+                binding.rwCardList.startAnimation(clearAnimation)
+
+            firstStart = false
         }
 
         adapter = RecyclerViewAdapter(
             CardViewHolderFactory(),
-            R.layout.card_item
+            R.layout.card_item,
         )
 
-        cardList.adapter = adapter
+        binding.rwCardList.adapter = adapter
 
         viewModel.data.observe(viewLifecycleOwner) { data ->
             adapter.addItems(data)
