@@ -70,6 +70,9 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             }
         }
 
+        fromX -= position
+        fromY -= position
+
         val anim1 = TranslateAnimation(
             fromX, fromX,
             fromY, fromY
@@ -95,10 +98,8 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
         })
 
         val fadeIn = ScaleAnimation(
-            -1f,
-            1f,
-            1f,
-            1f,
+            -1f,1f,
+            1f,1f,
             Animation.RELATIVE_TO_SELF,
             0.5f,
             Animation.RELATIVE_TO_SELF,
@@ -107,6 +108,18 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
 
         fadeIn.duration = 1000
         fadeIn.fillAfter = true
+
+        val elixirFade = ScaleAnimation(
+            0f, 1f,
+            0f, 1f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        )
+
+        elixirFade.duration = 300
+        elixirFade.fillAfter = true
 
         anim2.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {}
@@ -134,6 +147,8 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             override fun onAnimationEnd(animation: Animation?) {
                 elixir.visibility = View.VISIBLE
                 lvl.visibility = View.VISIBLE
+                elixir.startAnimation(elixirFade)
+                lvl.startAnimation(elixirFade)
             }
 
             override fun onAnimationRepeat(animation: Animation?) {}

@@ -14,12 +14,13 @@
 
         <ImageView
             android:id="@+id/card_elixir"
-            android:visibility="invisible"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:translationZ="1dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="45dp"
             android:src="@drawable/elixir_common"
-            app:layout_constraintStart_toStartOf="parent"
+            android:translationZ="1dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -38,7 +39,7 @@
 
         <ImageView
             android:id="@+id/card_image"
-            android:layout_width="60dp"
+            android:layout_width="56dp"
             android:layout_height="75dp"
             android:layout_marginTop="5dp"
             android:background="@null"

@@ -69,10 +69,16 @@ class CardsFragment : Fragment() {
     private fun setLoader(isComplete: Boolean) {
         binding.randomButton.isEnabled = isComplete
         binding.deck.isVisible = isComplete
+
+        binding.costLine.visibility = View.INVISIBLE
     }
 
     private fun setAverage(average: Average) {
+        binding.costLine.visibility = View.VISIBLE
+
         binding.averageCost.text = average.cost.toString()
+        binding.averageCost.setTextColor(average.rareColor)
+        binding.averageCostTitle.setTextColor(average.rareColor)
         binding.totalElixir.setImageResource(average.elixir)
     }
 
