@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.example.cards.R
 import com.example.cards.adapters.ViewHolder
 import com.example.cards.models.Card
+import kotlinx.coroutines.*
 
 
 class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
@@ -32,7 +33,7 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
         var fromY = 0f
         var fromX = 0f
 
-        val multiplier = if (position < 4) 5 else 3
+        val multiplier = (position + 1) * 1.2
 
         when(position) {
             0 -> {
@@ -80,7 +81,7 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             fromX, 1f,
             fromY, 1f
         ).apply {
-            duration = ((9000 - position * 1000) / multiplier).toLong()
+            duration = ((position * 1000) / multiplier).toLong()
         }
 
         anim1.setAnimationListener(object : Animation.AnimationListener {
@@ -119,12 +120,20 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
         })
 
         fadeIn.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {}
+            override fun onAnimationStart(animation: Animation?) {
+                CoroutineScope(Dispatchers.Main + Job()).launch {
+                    withContext(Dispatchers.IO) {
+                        Thread.sleep(500)
+                        withContext(Dispatchers.Main) {
+                            image.setImageResource(data.image)
+                        }
+                    }
+                }
+            }
 
             override fun onAnimationEnd(animation: Animation?) {
                 elixir.visibility = View.VISIBLE
                 lvl.visibility = View.VISIBLE
-                image.setImageResource(data.image)
             }
 
             override fun onAnimationRepeat(animation: Animation?) {}
