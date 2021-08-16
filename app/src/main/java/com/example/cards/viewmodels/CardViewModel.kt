@@ -17,6 +17,7 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
     private val _data: MutableLiveData<List<Card>> = MutableLiveData<List<Card>>()
     private val _loadedComplete: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     private val _averageCost: MutableLiveData<Average> = MutableLiveData<Average>()
+    private val _readyToNewData: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
 
     val data: LiveData<List<Card>>
         get() = _data
@@ -27,12 +28,17 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
     val averageCost: LiveData<Average>
         get() = _averageCost
 
+    val readyToNewData: LiveData<Boolean>
+        get() = _readyToNewData
+
     fun getNewShuffledData() {
         viewModelScope.launch(Dispatchers.IO) {
             val cards = mutableListOf<Card>()
             val ctx = getApplication<Application>().applicationContext
             var iconsList = mutableListOf<Int>()
             val average = Average(0, 0, 0)
+
+            _readyToNewData.postValue(false)
 
             for (i in 0..ICONS_COUNT) {
                 val iconId =
@@ -66,6 +72,7 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
             viewModelScope.launch(Dispatchers.IO) {
                 Thread.sleep(TIME_TO_END_ANIMATION)
                 _averageCost.postValue(average)
+                _readyToNewData.postValue(true)
             }
         }
     }

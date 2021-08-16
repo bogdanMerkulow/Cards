@@ -65,6 +65,10 @@ class CardsFragment : Fragment() {
         viewModel.averageCost.observe(viewLifecycleOwner) { average ->
             setAverage(average)
         }
+
+        viewModel.readyToNewData.observe(viewLifecycleOwner) { ready ->
+            binding.randomButton.isEnabled = ready
+        }
     }
 
     private fun onRandomButtonClick(clearAnimation: Animation) {
@@ -77,9 +81,7 @@ class CardsFragment : Fragment() {
     }
 
     private fun setLoader(isComplete: Boolean) {
-        binding.randomButton.isEnabled = isComplete
         binding.deck.isVisible = isComplete
-
         binding.costLine.visibility = View.INVISIBLE
     }
 
