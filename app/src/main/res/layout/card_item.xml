@@ -24,15 +24,21 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:visibility="invisible"
             android:id="@+id/card_lvl"
             android:layout_width="15dp"
             android:layout_height="15dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="2dp"
+            android:shadowColor="@color/black"
+            android:shadowDx="-1"
+            android:shadowDy="-1"
+            android:shadowRadius="5"
             android:text="2"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="10sp"
             android:translationZ="2dp"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="@+id/card_elixir"
             app:layout_constraintStart_toStartOf="@+id/card_elixir"
             app:layout_constraintTop_toTopOf="@+id/card_elixir" />
