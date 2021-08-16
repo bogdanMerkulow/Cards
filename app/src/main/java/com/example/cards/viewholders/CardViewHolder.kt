@@ -84,7 +84,7 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             fromX, DEFAULT_POS_AND_SIZE,
             fromY, DEFAULT_POS_AND_SIZE
         ).apply {
-            duration = ((position * 1000) / multiplier).toLong()
+            duration = ((position * ANIMATION_DURATION) / multiplier).toLong()
         }
 
         setCardOnStartPos.setAnimationListener(object : Animation.AnimationListener {
