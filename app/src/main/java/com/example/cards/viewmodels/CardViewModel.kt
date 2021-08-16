@@ -58,13 +58,13 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
             average.elixir = getRare(average.cost)
             average.rareColor = getRareColor(average.cost)
 
-            Thread.sleep(1200)
+            Thread.sleep(START_DELAY)
 
             _data.postValue(cards.shuffled())
             _loadedComplete.postValue(true)
 
             viewModelScope.launch(Dispatchers.IO) {
-                Thread.sleep(3200)
+                Thread.sleep(TIME_TO_END_ANIMATION)
                 _averageCost.postValue(average)
             }
         }
@@ -91,6 +91,8 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     companion object {
+        private const val START_DELAY = 1200L
+        private const val TIME_TO_END_ANIMATION = 3200L
         private const val DEF_TYPE = "drawable"
         private const val ICON_PREFIX: String = "icon"
         private const val ICONS_COUNT: Int = 82
