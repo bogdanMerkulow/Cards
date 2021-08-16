@@ -35,7 +35,7 @@ class CardsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.rwCardList.layoutManager = GridLayoutManager(context, SPAN_COUNT)
+        binding.rvCardList.layoutManager = GridLayoutManager(context, SPAN_COUNT)
         val clearAnimation: Animation =
             AnimationUtils.loadAnimation(activity, R.anim.clear_deck_animation)
 
@@ -50,10 +50,10 @@ class CardsFragment : Fragment() {
 
         val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(adapter)
         val touchHelper = ItemTouchHelper(callback)
-        touchHelper.attachToRecyclerView(binding.rwCardList)
+        touchHelper.attachToRecyclerView(binding.rvCardList)
 
 
-        binding.rwCardList.adapter = adapter
+        binding.rvCardList.adapter = adapter
 
         viewModel.data.observe(viewLifecycleOwner) { data ->
             adapter.addItems(data)
@@ -72,7 +72,7 @@ class CardsFragment : Fragment() {
         viewModel.getNewShuffledData()
         binding.randomButton.isEnabled = false
         if (!firstStart)
-            binding.rwCardList.startAnimation(clearAnimation)
+            binding.rvCardList.startAnimation(clearAnimation)
 
         firstStart = false
     }
