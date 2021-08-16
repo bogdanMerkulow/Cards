@@ -3,6 +3,7 @@ package com.example.cards.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cards.factories.ViewHolderFactory
 import java.util.*
 
 class RecyclerViewAdapter<T>(
