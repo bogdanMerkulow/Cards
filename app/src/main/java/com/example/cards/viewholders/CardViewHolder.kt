@@ -73,25 +73,25 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
         fromX -= position
         fromY -= position
 
-        val anim1 = TranslateAnimation(
+        val setCardOnStartPos = TranslateAnimation(
             fromX, fromX,
             fromY, fromY
         ).apply {
             duration = ANIMATION_DURATION
         }
 
-        val anim2 = TranslateAnimation(
+        val placeCardToEndPos = TranslateAnimation(
             fromX, DEFAULT_POS_AND_SIZE,
             fromY, DEFAULT_POS_AND_SIZE
         ).apply {
             duration = ((position * 1000) / multiplier).toLong()
         }
 
-        anim1.setAnimationListener(object : Animation.AnimationListener {
+        setCardOnStartPos.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {}
 
             override fun onAnimationEnd(animation: Animation?) {
-                itemView.startAnimation(anim2)
+                itemView.startAnimation(placeCardToEndPos)
             }
 
             override fun onAnimationRepeat(animation: Animation?) {}
@@ -121,7 +121,7 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
         elixirFade.duration = ANIMATION_DURATION / 3
         elixirFade.fillAfter = true
 
-        anim2.setAnimationListener(object : Animation.AnimationListener {
+        placeCardToEndPos.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {}
 
             override fun onAnimationEnd(animation: Animation?) {
@@ -155,7 +155,7 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
 
         })
 
-        itemView.startAnimation(anim1)
+        itemView.startAnimation(setCardOnStartPos)
     }
 
     companion object {
