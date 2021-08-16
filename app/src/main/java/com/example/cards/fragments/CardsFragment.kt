@@ -51,7 +51,7 @@ class CardsFragment : Fragment() {
 
         val touchHelper = ItemTouchHelper(SimpleItemTouchHelperCallback(adapter))
         touchHelper.attachToRecyclerView(binding.rvCardList)
-        
+
         binding.rvCardList.adapter = adapter
 
         viewModel.data.observe(viewLifecycleOwner) { data ->

@@ -26,8 +26,8 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             image.setImageResource(R.drawable.card_back)
         }
 
-        var fromY = 0f
-        var fromX = 0f
+        var fromX = START_POS_X
+        var fromY = START_POS_Y
 
         val multiplier = (position + 1) * MAGIC_MULTIPLIER
 
