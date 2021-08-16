@@ -40,12 +40,7 @@ class CardsFragment : Fragment() {
             AnimationUtils.loadAnimation(activity, R.anim.clear_deck_animation)
 
         binding.randomButton.setOnClickListener {
-            viewModel.getNewShuffledData()
-            binding.randomButton.isEnabled = false
-            if (!firstStart)
-                binding.rwCardList.startAnimation(clearAnimation)
-
-            firstStart = false
+            onRandomButtonClick(clearAnimation)
         }
 
         adapter = RecyclerViewAdapter(
@@ -71,6 +66,15 @@ class CardsFragment : Fragment() {
         viewModel.averageCost.observe(viewLifecycleOwner) { average ->
             setAverage(average)
         }
+    }
+
+    private fun onRandomButtonClick(clearAnimation: Animation) {
+        viewModel.getNewShuffledData()
+        binding.randomButton.isEnabled = false
+        if (!firstStart)
+            binding.rwCardList.startAnimation(clearAnimation)
+
+        firstStart = false
     }
 
     private fun setLoader(isComplete: Boolean) {
