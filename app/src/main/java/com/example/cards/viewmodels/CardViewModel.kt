@@ -56,7 +56,7 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
 
             average.cost = average.cost / CARDS_COUNT
             average.elixir = getRare(average.cost)
-            average.rareColor = getRareHexColor(average.cost)
+            average.rareColor = getRareColor(average.cost)
 
             Thread.sleep(1200)
 
@@ -80,7 +80,7 @@ class CardViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private fun getRareHexColor(value: Int): Int {
+    private fun getRareColor(value: Int): Int {
         return when (value) {
             in 1..2 -> Color.GRAY
             in 3..4 -> Color.YELLOW
