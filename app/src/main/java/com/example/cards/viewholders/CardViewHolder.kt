@@ -35,38 +35,38 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
 
         val multiplier = (position + 1) * 1.2
 
-        when(position) {
+        when (position) {
             0 -> {
-                fromY = 1f
-                fromX = 1f
+                fromY = DEFAULT_POS_AND_SIZE
+                fromX = DEFAULT_POS_AND_SIZE
             }
             1 -> {
-                fromY = 1f
-                fromX = DEFAULT_POS_X
+                fromY = DEFAULT_POS_AND_SIZE
+                fromX = START_POS_X
             }
             2 -> {
-                fromY = 1f
-                fromX = DEFAULT_POS_X * 2f
+                fromY = DEFAULT_POS_AND_SIZE
+                fromX = START_POS_X * 2f
             }
             3 -> {
-                fromY = 1f
-                fromX = DEFAULT_POS_X * 3f
+                fromY = DEFAULT_POS_AND_SIZE
+                fromX = START_POS_X * 3f
             }
             4 -> {
-                fromY = DEFAULT_POS_Y
-                fromX = 1f
+                fromY = START_POS_Y
+                fromX = DEFAULT_POS_AND_SIZE
             }
             5 -> {
-                fromY = DEFAULT_POS_Y
-                fromX = DEFAULT_POS_X
+                fromY = START_POS_Y
+                fromX = START_POS_X
             }
             6 -> {
-                fromY = DEFAULT_POS_Y
-                fromX = DEFAULT_POS_X * 2f
+                fromY = START_POS_Y
+                fromX = START_POS_X * 2f
             }
             7 -> {
-                fromY = DEFAULT_POS_Y
-                fromX = DEFAULT_POS_X * 3f
+                fromY = START_POS_Y
+                fromX = START_POS_X * 3f
             }
         }
 
@@ -77,12 +77,12 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             fromX, fromX,
             fromY, fromY
         ).apply {
-            duration = 1000
+            duration = ANIMATION_DURATION
         }
 
         val anim2 = TranslateAnimation(
-            fromX, 1f,
-            fromY, 1f
+            fromX, DEFAULT_POS_AND_SIZE,
+            fromY, DEFAULT_POS_AND_SIZE
         ).apply {
             duration = ((position * 1000) / multiplier).toLong()
         }
@@ -98,27 +98,27 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
         })
 
         val fadeIn = ScaleAnimation(
-            -1f,1f,
-            1f,1f,
+            -1f, DEFAULT_POS_AND_SIZE,
+            1f, DEFAULT_POS_AND_SIZE,
             Animation.RELATIVE_TO_SELF,
             0.5f,
             Animation.RELATIVE_TO_SELF,
             0.5f
         )
 
-        fadeIn.duration = 1000
+        fadeIn.duration = ANIMATION_DURATION
         fadeIn.fillAfter = true
 
         val elixirFade = ScaleAnimation(
-            0f, 1f,
-            0f, 1f,
+            0f, DEFAULT_POS_AND_SIZE,
+            0f, DEFAULT_POS_AND_SIZE,
             Animation.RELATIVE_TO_SELF,
             0.5f,
             Animation.RELATIVE_TO_SELF,
             0.5f
         )
 
-        elixirFade.duration = 300
+        elixirFade.duration = ANIMATION_DURATION / 3
         elixirFade.fillAfter = true
 
         anim2.setAnimationListener(object : Animation.AnimationListener {
@@ -136,7 +136,7 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             override fun onAnimationStart(animation: Animation?) {
                 CoroutineScope(Dispatchers.Main + Job()).launch {
                     withContext(Dispatchers.IO) {
-                        Thread.sleep(500)
+                        Thread.sleep(ANIMATION_DURATION / 2)
                         withContext(Dispatchers.Main) {
                             image.setImageResource(data.image)
                         }
@@ -159,7 +159,9 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
     }
 
     companion object {
-        private const val DEFAULT_POS_X = -210f
-        private const val DEFAULT_POS_Y = -230f
+        private const val DEFAULT_POS_AND_SIZE = 1f
+        private const val ANIMATION_DURATION = 1000L
+        private const val START_POS_X = -210f
+        private const val START_POS_Y = -230f
     }
 }

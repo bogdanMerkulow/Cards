@@ -1,6 +1,5 @@
 package com.example.cards.fragments
 
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +9,16 @@ import android.view.animation.AnimationUtils
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.cards.R
 import com.example.cards.adapters.RecyclerViewAdapter
+import com.example.cards.adapters.SimpleItemTouchHelperCallback
 import com.example.cards.databinding.CardsFragmentBinding
 import com.example.cards.factories.CardViewHolderFactory
 import com.example.cards.models.Average
 import com.example.cards.models.Card
 import com.example.cards.viewmodels.CardViewModel
+
 
 class CardsFragment : Fragment() {
     private lateinit var viewModel: CardViewModel
@@ -35,7 +36,8 @@ class CardsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.rwCardList.layoutManager = GridLayoutManager(context, 4)
-        val clearAnimation: Animation = AnimationUtils.loadAnimation(activity, R.anim.clear_deck_animation)
+        val clearAnimation: Animation =
+            AnimationUtils.loadAnimation(activity, R.anim.clear_deck_animation)
 
         binding.randomButton.setOnClickListener {
             viewModel.getNewShuffledData()
@@ -50,6 +52,11 @@ class CardsFragment : Fragment() {
             CardViewHolderFactory(),
             R.layout.card_item,
         )
+
+        val callback: ItemTouchHelper.Callback = SimpleItemTouchHelperCallback(adapter)
+        val touchHelper = ItemTouchHelper(callback)
+        touchHelper.attachToRecyclerView(binding.rwCardList)
+
 
         binding.rwCardList.adapter = adapter
 
