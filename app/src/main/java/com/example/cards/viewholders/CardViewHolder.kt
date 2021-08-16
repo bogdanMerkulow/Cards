@@ -17,17 +17,13 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
     private val image: ImageView = itemView.findViewById(R.id.card_image)
     private val lvl: TextView = itemView.findViewById(R.id.card_lvl)
 
-    override fun bind(data: Card, listener: (Card) -> Unit, position: Int) {
+    override fun bind(data: Card, position: Int) {
         itemView.apply {
             lvl.text = data.lvl.toString()
             elixir.setImageResource(data.rare)
             elixir.visibility = View.INVISIBLE
             lvl.visibility = View.INVISIBLE
             image.setImageResource(R.drawable.card_back)
-
-            setOnClickListener {
-                listener(data)
-            }
         }
 
         var fromY = 0f
