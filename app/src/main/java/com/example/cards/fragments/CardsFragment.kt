@@ -8,6 +8,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.cards.R
@@ -15,10 +16,10 @@ import com.example.cards.adapters.RecyclerViewAdapter
 import com.example.cards.adapters.SimpleItemTouchHelperCallback
 import com.example.cards.databinding.CardsFragmentBinding
 import com.example.cards.factories.CardViewHolderFactory
+import com.example.cards.factories.ViewModelFactory
 import com.example.cards.models.Average
 import com.example.cards.models.Card
 import com.example.cards.viewmodels.CardViewModel
-
 
 class CardsFragment : Fragment() {
     private lateinit var viewModel: CardViewModel
@@ -29,7 +30,7 @@ class CardsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = CardViewModel(requireActivity().application)
+        viewModel = ViewModelProvider(this, ViewModelFactory()).get(CardViewModel::class.java)
         _binding = CardsFragmentBinding.inflate(layoutInflater)
     }
 
