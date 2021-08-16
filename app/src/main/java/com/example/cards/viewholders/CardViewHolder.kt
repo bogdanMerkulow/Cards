@@ -33,7 +33,7 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
         var fromY = 0f
         var fromX = 0f
 
-        val multiplier = (position + 1) * 1.2
+        val multiplier = (position + 1) * MAGIC_MULTIPLIER
 
         when (position) {
             0 -> {
@@ -46,11 +46,11 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             }
             2 -> {
                 fromY = DEFAULT_POS_AND_SIZE
-                fromX = START_POS_X * 2f
+                fromX = START_POS_X * SECOND_ITEM_POS_MULTIPLIER
             }
             3 -> {
                 fromY = DEFAULT_POS_AND_SIZE
-                fromX = START_POS_X * 3f
+                fromX = START_POS_X * THIRD_ITEM_POS_MULTIPLIER
             }
             4 -> {
                 fromY = START_POS_Y
@@ -62,18 +62,18 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             }
             6 -> {
                 fromY = START_POS_Y
-                fromX = START_POS_X * 2f
+                fromX = START_POS_X * SECOND_ITEM_POS_MULTIPLIER
             }
             7 -> {
                 fromY = START_POS_Y
-                fromX = START_POS_X * 3f
+                fromX = START_POS_X * THIRD_ITEM_POS_MULTIPLIER
             }
         }
 
         fromX -= position
         fromY -= position
 
-        val setCardOnStartPos = TranslateAnimation(
+        val setCardOnStartPosAnimation = TranslateAnimation(
             fromX, fromX,
             fromY, fromY
         ).apply {
@@ -87,7 +87,7 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             duration = ((position * ANIMATION_DURATION) / multiplier).toLong()
         }
 
-        setCardOnStartPos.setAnimationListener(object : Animation.AnimationListener {
+        setCardOnStartPosAnimation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {}
 
             override fun onAnimationEnd(animation: Animation?) {
@@ -97,46 +97,46 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             override fun onAnimationRepeat(animation: Animation?) {}
         })
 
-        val fadeIn = ScaleAnimation(
-            -1f, DEFAULT_POS_AND_SIZE,
-            1f, DEFAULT_POS_AND_SIZE,
+        val flipCardAnimation = ScaleAnimation(
+            CARD_BACKGROUND_SIZE, DEFAULT_POS_AND_SIZE,
+            DEFAULT_POS_AND_SIZE, DEFAULT_POS_AND_SIZE,
             Animation.RELATIVE_TO_SELF,
-            0.5f,
+            PIVOT_SIZE,
             Animation.RELATIVE_TO_SELF,
-            0.5f
+            PIVOT_SIZE
         )
 
-        fadeIn.duration = ANIMATION_DURATION
-        fadeIn.fillAfter = true
+        flipCardAnimation.duration = ANIMATION_DURATION
+        flipCardAnimation.fillAfter = true
 
-        val elixirFade = ScaleAnimation(
-            0f, DEFAULT_POS_AND_SIZE,
-            0f, DEFAULT_POS_AND_SIZE,
+        val elixirFadeAnimation = ScaleAnimation(
+            MINIMUM_SIZE, DEFAULT_POS_AND_SIZE,
+            MINIMUM_SIZE, DEFAULT_POS_AND_SIZE,
             Animation.RELATIVE_TO_SELF,
-            0.5f,
+            PIVOT_SIZE,
             Animation.RELATIVE_TO_SELF,
-            0.5f
+            PIVOT_SIZE
         )
 
-        elixirFade.duration = ANIMATION_DURATION / 3
-        elixirFade.fillAfter = true
+        elixirFadeAnimation.duration = ANIMATION_DURATION / ELIXIR_FADE_MULTIPLIER
+        elixirFadeAnimation.fillAfter = true
 
         placeCardToEndPos.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {}
 
             override fun onAnimationEnd(animation: Animation?) {
-                itemView.startAnimation(fadeIn)
+                itemView.startAnimation(flipCardAnimation)
             }
 
             override fun onAnimationRepeat(animation: Animation?) {}
 
         })
 
-        fadeIn.setAnimationListener(object : Animation.AnimationListener {
+        flipCardAnimation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {
                 CoroutineScope(Dispatchers.Main + Job()).launch {
                     withContext(Dispatchers.IO) {
-                        Thread.sleep(ANIMATION_DURATION / 2)
+                        Thread.sleep(ANIMATION_DURATION / IMAGE_FADE_MULTIPLIER)
                         withContext(Dispatchers.Main) {
                             image.setImageResource(data.image)
                         }
@@ -147,18 +147,26 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             override fun onAnimationEnd(animation: Animation?) {
                 elixir.visibility = View.VISIBLE
                 lvl.visibility = View.VISIBLE
-                elixir.startAnimation(elixirFade)
-                lvl.startAnimation(elixirFade)
+                elixir.startAnimation(elixirFadeAnimation)
+                lvl.startAnimation(elixirFadeAnimation)
             }
 
             override fun onAnimationRepeat(animation: Animation?) {}
 
         })
 
-        itemView.startAnimation(setCardOnStartPos)
+        itemView.startAnimation(setCardOnStartPosAnimation)
     }
 
     companion object {
+        private const val MAGIC_MULTIPLIER = 1.2f
+        private const val IMAGE_FADE_MULTIPLIER = 2
+        private const val ELIXIR_FADE_MULTIPLIER = 3
+        private const val SECOND_ITEM_POS_MULTIPLIER = 2f
+        private const val THIRD_ITEM_POS_MULTIPLIER = 3f
+        private const val PIVOT_SIZE = 0.5f
+        private const val CARD_BACKGROUND_SIZE = -1f
+        private const val MINIMUM_SIZE = 0f
         private const val DEFAULT_POS_AND_SIZE = 1f
         private const val ANIMATION_DURATION = 1000L
         private const val START_POS_X = -210f

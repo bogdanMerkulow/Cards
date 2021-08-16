@@ -35,7 +35,7 @@ class CardsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.rwCardList.layoutManager = GridLayoutManager(context, 4)
+        binding.rwCardList.layoutManager = GridLayoutManager(context, SPAN_COUNT)
         val clearAnimation: Animation =
             AnimationUtils.loadAnimation(activity, R.anim.clear_deck_animation)
 
@@ -97,4 +97,8 @@ class CardsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = binding.root
+
+    companion object {
+        private const val SPAN_COUNT = 4
+    }
 }
