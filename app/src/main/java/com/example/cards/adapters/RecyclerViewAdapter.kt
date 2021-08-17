@@ -37,13 +37,9 @@ class RecyclerViewAdapter<T>(
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         if (fromPosition < toPosition) {
-            for (i in fromPosition until toPosition) {
-                Collections.swap(items, i, i + 1)
-            }
+            Collections.swap(items, fromPosition, toPosition)
         } else {
-            for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(items, i, i - 1)
-            }
+            Collections.swap(items, toPosition, fromPosition)
         }
         notifyItemMoved(fromPosition, toPosition)
         return true
