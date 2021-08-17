@@ -1,5 +1,6 @@
 package com.example.cards.viewholders
 
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
@@ -166,6 +167,6 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
         private const val DEFAULT_POS_AND_SIZE = 1f
         private const val ANIMATION_DURATION = 1000L
         private const val START_POS_X = -210f
-        private const val START_POS_Y = -230f
+        private const val START_POS_Y = -225f
     }
 }
