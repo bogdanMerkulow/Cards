@@ -49,12 +49,12 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
             iconsList = iconsList.shuffled() as MutableList<Int>
 
-            for (i in 1..CARDS_COUNT) {
+            iconsList.forEach { icon ->
                 val cardLvl = Random.nextInt(MIN_LVL_RARE, MAX_LVL_RARE)
 
                 val elixir = getRare(cardLvl)
 
-                cards.add(Card(elixir, cardLvl, iconsList[i]))
+                cards.add(Card(elixir, cardLvl, icon))
             }
 
             cards.forEach { card ->
@@ -122,7 +122,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
         private const val DEF_TYPE = "drawable"
         private const val ICON_PREFIX: String = "icon"
         private const val ICONS_COUNT: Int = 82
-        private const val CARDS_COUNT: Int = 8
+        private const val CARDS_COUNT: Int = 7
         private const val MIN_LVL_RARE: Int = 1
         private const val MAX_LVL_RARE: Int = 11
     }
