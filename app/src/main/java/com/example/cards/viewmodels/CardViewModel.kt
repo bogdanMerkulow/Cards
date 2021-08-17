@@ -36,9 +36,14 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
             _readyToNewData.postValue(false)
 
-            for (i in 0..ICONS_COUNT) {
-                val iconId =
-                    context.resources.getIdentifier("$ICON_PREFIX$i", DEF_TYPE, context.packageName)
+
+            getRandomNumbersList(CARDS_COUNT, ICONS_COUNT).forEach { randomNumber ->
+                val iconId = context.resources.getIdentifier(
+                        "$ICON_PREFIX$randomNumber",
+                                DEF_TYPE,
+                                context.packageName
+                        )
+
                 iconsList.add(iconId)
             }
 
@@ -73,6 +78,24 @@ class CardViewModel(private val context: Context) : ViewModel() {
         }
     }
 
+    private fun getRandomNumbersList(cardsCount: Int, iconsCount: Int): List<Int> {
+        val numberList = mutableListOf<Int>()
+
+        for (i in (iconsCount - cardsCount)..iconsCount) {
+            val number = Random.nextInt(1, i)
+
+            if (numberList.contains(number))
+                numberList.add(i)
+            else
+                numberList.add(number)
+
+            if (numberList.count() > cardsCount) {
+                return numberList.shuffled()
+            }
+        }
+        return listOf()
+    }
+
     private fun getRare(value: Int): Int {
         return when (value) {
             in 1..2 -> R.drawable.elixir_common
@@ -101,6 +124,6 @@ class CardViewModel(private val context: Context) : ViewModel() {
         private const val ICONS_COUNT: Int = 82
         private const val CARDS_COUNT: Int = 8
         private const val MIN_LVL_RARE: Int = 1
-        private const val MAX_LVL_RARE: Int = 10
+        private const val MAX_LVL_RARE: Int = 11
     }
 }
