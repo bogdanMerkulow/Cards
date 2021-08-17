@@ -1,6 +1,6 @@
 package com.example.cards.viewmodels
 
-import android.app.Application
+import android.content.Context
 import android.graphics.Color
 import androidx.lifecycle.*
 import com.example.cards.R
@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
-class CardViewModel(private val application: Application) : ViewModel() {
+class CardViewModel(private val context: Context) : ViewModel() {
     private val _data: MutableLiveData<List<Card>> = MutableLiveData<List<Card>>()
     private val _loadedComplete: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     private val _averageCost: MutableLiveData<Average> = MutableLiveData<Average>()
@@ -31,7 +31,6 @@ class CardViewModel(private val application: Application) : ViewModel() {
     fun getNewShuffledData() {
         viewModelScope.launch(Dispatchers.IO) {
             val cards = mutableListOf<Card>()
-            val ctx = application.applicationContext
             var iconsList = mutableListOf<Int>()
             val average = Average(0, 0, 0)
 
@@ -39,7 +38,7 @@ class CardViewModel(private val application: Application) : ViewModel() {
 
             for (i in 0..ICONS_COUNT) {
                 val iconId =
-                    ctx.resources.getIdentifier("$ICON_PREFIX$i", DEF_TYPE, ctx.packageName)
+                    context.resources.getIdentifier("$ICON_PREFIX$i", DEF_TYPE, context.packageName)
                 iconsList.add(iconId)
             }
 
