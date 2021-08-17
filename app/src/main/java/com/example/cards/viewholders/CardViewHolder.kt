@@ -35,7 +35,7 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             1 -> positionFrom.setPos(START_POS_X, DEFAULT_POS_AND_SIZE)
             2 -> positionFrom.setPos(START_POS_X * SECOND_ITEM_POS_MULTIPLIER, DEFAULT_POS_AND_SIZE)
             3 -> positionFrom.setPos(START_POS_X * THIRD_ITEM_POS_MULTIPLIER, DEFAULT_POS_AND_SIZE)
-            4 -> positionFrom.setPos(START_POS_Y, DEFAULT_POS_AND_SIZE)
+            4 -> positionFrom.setPos(DEFAULT_POS_AND_SIZE, START_POS_Y)
             5 -> positionFrom.setPos(START_POS_X, START_POS_Y)
             6 -> positionFrom.setPos(START_POS_X * SECOND_ITEM_POS_MULTIPLIER, START_POS_Y)
             7 -> positionFrom.setPos(START_POS_X * THIRD_ITEM_POS_MULTIPLIER, START_POS_Y)
