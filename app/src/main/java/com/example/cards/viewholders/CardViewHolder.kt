@@ -1,6 +1,5 @@
 package com.example.cards.viewholders
 
-import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
@@ -27,59 +26,36 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             image.setImageResource(R.drawable.card_back)
         }
 
-        var fromX = START_POS_X
-        var fromY = START_POS_Y
+        val positionFrom = Position(START_POS_X, START_POS_Y)
 
         val multiplier = (position + 1) * MAGIC_MULTIPLIER
 
         when (position) {
-            0 -> {
-                fromY = DEFAULT_POS_AND_SIZE
-                fromX = DEFAULT_POS_AND_SIZE
-            }
-            1 -> {
-                fromY = DEFAULT_POS_AND_SIZE
-                fromX = START_POS_X
-            }
-            2 -> {
-                fromY = DEFAULT_POS_AND_SIZE
-                fromX = START_POS_X * SECOND_ITEM_POS_MULTIPLIER
-            }
-            3 -> {
-                fromY = DEFAULT_POS_AND_SIZE
-                fromX = START_POS_X * THIRD_ITEM_POS_MULTIPLIER
-            }
-            4 -> {
-                fromY = START_POS_Y
-                fromX = DEFAULT_POS_AND_SIZE
-            }
-            5 -> {
-                fromY = START_POS_Y
-                fromX = START_POS_X
-            }
-            6 -> {
-                fromY = START_POS_Y
-                fromX = START_POS_X * SECOND_ITEM_POS_MULTIPLIER
-            }
-            7 -> {
-                fromY = START_POS_Y
-                fromX = START_POS_X * THIRD_ITEM_POS_MULTIPLIER
-            }
+            0 -> positionFrom.setPos(DEFAULT_POS_AND_SIZE, DEFAULT_POS_AND_SIZE)
+            1 -> positionFrom.setPos(START_POS_X, DEFAULT_POS_AND_SIZE)
+            2 -> positionFrom.setPos(START_POS_X * SECOND_ITEM_POS_MULTIPLIER, DEFAULT_POS_AND_SIZE)
+            3 -> positionFrom.setPos(START_POS_X * THIRD_ITEM_POS_MULTIPLIER, DEFAULT_POS_AND_SIZE)
+            4 -> positionFrom.setPos(START_POS_Y, DEFAULT_POS_AND_SIZE)
+            5 -> positionFrom.setPos(START_POS_X, START_POS_Y)
+            6 -> positionFrom.setPos(START_POS_X * SECOND_ITEM_POS_MULTIPLIER, START_POS_Y)
+            7 -> positionFrom.setPos(START_POS_X * THIRD_ITEM_POS_MULTIPLIER, START_POS_Y)
         }
 
-        fromX -= position
-        fromY -= position
+        positionFrom.setPos(
+            positionFrom.x - position,
+            positionFrom.y - position
+        )
 
         val setCardOnStartPosAnimation = TranslateAnimation(
-            fromX, fromX,
-            fromY, fromY
+            positionFrom.x, positionFrom.x,
+            positionFrom.y, positionFrom.y
         ).apply {
             duration = ANIMATION_DURATION
         }
 
         val placeCardToEndPos = TranslateAnimation(
-            fromX, DEFAULT_POS_AND_SIZE,
-            fromY, DEFAULT_POS_AND_SIZE
+            positionFrom.x, DEFAULT_POS_AND_SIZE,
+            positionFrom.y, DEFAULT_POS_AND_SIZE
         ).apply {
             duration = ((position * ANIMATION_DURATION) / multiplier).toLong()
         }
@@ -153,6 +129,16 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
         })
 
         itemView.startAnimation(setCardOnStartPosAnimation)
+    }
+
+    inner class Position(
+        var x: Float,
+        var y: Float
+    ) {
+        fun setPos(x: Float, y: Float) {
+            this.x = x
+            this.y = y
+        }
     }
 
     companion object {
