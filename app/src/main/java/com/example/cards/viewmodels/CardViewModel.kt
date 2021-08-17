@@ -57,9 +57,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
                 cards.add(Card(elixir, cardLvl, icon))
             }
 
-            cards.forEach { card ->
-                average.cost += card.lvl
-            }
+            average.cost = cards.map { it.lvl }.sum()
 
             average.cost = average.cost / CARDS_COUNT
             average.elixir = getRare(average.cost)
