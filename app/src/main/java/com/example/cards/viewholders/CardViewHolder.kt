@@ -77,10 +77,10 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             PIVOT_SIZE,
             Animation.RELATIVE_TO_SELF,
             PIVOT_SIZE
-        )
-
-        flipCardAnimation.duration = ANIMATION_DURATION
-        flipCardAnimation.fillAfter = true
+        ).apply {
+            duration = ANIMATION_DURATION
+            fillAfter = true
+        }
 
         val elixirFadeAnimation = ScaleAnimation(
             MINIMUM_SIZE, DEFAULT_POS_AND_SIZE,
@@ -89,10 +89,10 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             PIVOT_SIZE,
             Animation.RELATIVE_TO_SELF,
             PIVOT_SIZE
-        )
-
-        elixirFadeAnimation.duration = ANIMATION_DURATION / ELIXIR_FADE_MULTIPLIER
-        elixirFadeAnimation.fillAfter = true
+        ).apply {
+            duration = ANIMATION_DURATION / ELIXIR_FADE_MULTIPLIER
+            fillAfter = true
+        }
 
         placeCardToEndPos.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {}
