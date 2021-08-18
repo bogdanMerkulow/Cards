@@ -31,12 +31,12 @@ private const val START_POS_Y = -225f
 private fun getInflater(parent: ViewGroup): View = LayoutInflater.from(parent.context)
     .inflate(R.layout.card_item, parent, false)
 
-class CardViewHolder(parent: ViewGroup) : ViewHolder<Card>(getInflater(parent)) {
+class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) : ViewHolder<Card>(getInflater(parent)) {
     private val elixir: ImageView = itemView.findViewById(R.id.card_elixir)
     private val image: ImageView = itemView.findViewById(R.id.card_image)
     private val lvl: TextView = itemView.findViewById(R.id.card_lvl)
 
-    override fun bind(data: Card, listener: (Int) -> Unit) {
+    override fun bind(data: Card) {
         val multiplier = (adapterPosition + 1) * MAGIC_MULTIPLIER
         val positionFrom = when (adapterPosition) {
             0 -> Position(DEFAULT_POS_AND_SIZE - adapterPosition, DEFAULT_POS_AND_SIZE - adapterPosition)

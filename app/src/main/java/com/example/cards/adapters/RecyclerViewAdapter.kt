@@ -7,7 +7,6 @@ import java.util.*
 
 class RecyclerViewAdapter<T>(
     private val viewHolderFactory: ViewHolderFactory<T>,
-    private val listener: (Int) -> Unit = {}
 ) : RecyclerView.Adapter<ViewHolder<T>>(), ItemTouchHelperAdapter {
 
     private var items: MutableList<T> = mutableListOf()
@@ -29,7 +28,7 @@ class RecyclerViewAdapter<T>(
     }
 
     override fun onBindViewHolder(holder: ViewHolder<T>, position: Int) {
-        holder.bind(items[position], listener)
+        holder.bind(items[position])
     }
 
     override fun getItemCount(): Int {

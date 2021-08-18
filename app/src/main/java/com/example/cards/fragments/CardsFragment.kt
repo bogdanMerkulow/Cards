@@ -45,8 +45,7 @@ class CardsFragment : Fragment() {
         }
 
         adapter = RecyclerViewAdapter(
-            CardViewHolderFactory(),
-            this::onCardClick
+            CardViewHolderFactory(this::onCardClick),
         )
 
         val touchHelper = ItemTouchHelper(SimpleItemTouchHelperCallback(adapter))
