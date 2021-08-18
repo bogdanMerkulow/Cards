@@ -44,11 +44,10 @@ class RecyclerViewAdapter<T>(
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
-        if (fromPosition < toPosition) {
-            Collections.swap(items, fromPosition, toPosition)
-        } else {
-            Collections.swap(items, toPosition, fromPosition)
-        }
+        val from = fromPosition.coerceAtLeast(toPosition)
+        val to = fromPosition.coerceAtMost(toPosition)
+
+        Collections.swap(items, from, to)
 
         notifyItemMoved(fromPosition, toPosition)
         return true
