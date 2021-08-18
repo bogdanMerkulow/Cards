@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_card_list"
+            android:id="@+id/card_list"
             android:layout_width="845px"
             android:layout_height="495px"
             android:layout_marginStart="10dp"
@@ -44,7 +44,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rv_card_list">
+            app:layout_constraintTop_toBottomOf="@+id/card_list">
 
             <TextView
                 android:id="@+id/average_cost_title"
