@@ -91,7 +91,7 @@ class CardsFragment : Fragment() {
         binding.averageCost.text = average.cost.toString()
         binding.averageCost.setTextColor(average.rareColor)
         binding.averageCostTitle.setTextColor(average.rareColor)
-        binding.totalElixir.setImageResource(average.elixir)
+        binding.averageElixir.setImageResource(average.elixir)
     }
 
     override fun onCreateView(

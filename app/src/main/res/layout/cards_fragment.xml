@@ -65,7 +65,7 @@
                 android:textSize="11sp" />
 
             <ImageView
-                android:id="@+id/total_elixir"
+                android:id="@+id/average_elixir"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginStart="30dp"
