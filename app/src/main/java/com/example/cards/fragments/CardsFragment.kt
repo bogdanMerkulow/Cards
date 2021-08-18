@@ -98,4 +98,9 @@ class CardsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = binding.root
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
