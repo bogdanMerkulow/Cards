@@ -78,12 +78,10 @@ class CardsFragment : Fragment() {
 
     private fun onRandomButtonClick(clearAnimation: Animation) {
         viewModel.getNewShuffledData()
-        binding.randomButton.isEnabled = false
         binding.rvCardList.startAnimation(clearAnimation)
     }
 
     private fun onCardClick(position: Int) {
-        binding.randomButton.isEnabled = false
         viewModel.getRandomUniqueCard(position)
     }
 

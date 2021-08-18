@@ -113,6 +113,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
     fun getRandomUniqueCard(position: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             _loadedComplete.postValue(false)
+            _readyToNewData.postValue(false)
 
             val randomIcon = getRandomNumbersList(1, ICONS_COUNT)[0]
 
