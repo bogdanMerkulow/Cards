@@ -1,8 +1,8 @@
 package com.example.cards.factories
 
-import android.view.View
+import android.view.ViewGroup
 import com.example.cards.adapters.ViewHolder
 
 interface ViewHolderFactory<T> {
-    fun create(view: View): ViewHolder<T>
+    fun create(parent: ViewGroup): ViewHolder<T>
 }

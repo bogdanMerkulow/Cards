@@ -45,8 +45,7 @@ class CardsFragment : Fragment() {
         }
 
         adapter = RecyclerViewAdapter(
-            CardViewHolderFactory(),
-            R.layout.card_item,
+            CardViewHolderFactory(R.layout.card_item),
             this::onCardClick
         )
 
