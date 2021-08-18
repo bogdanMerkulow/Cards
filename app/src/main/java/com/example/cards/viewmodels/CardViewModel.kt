@@ -108,12 +108,6 @@ class CardViewModel(private val context: Context) : ViewModel() {
             _loadedComplete.postValue(false)
 
             val randomIcon = getRandomNumbersList(1, ICONS_COUNT)
-            if (randomIcon[0] in unavailableCards) {
-                getRandomUniqueCard(position)
-                return@launch
-            }
-
-            Thread.sleep(TIME_TO_DROP_CARD)
 
             val iconId = context.resources.getIdentifier(
                 "$ICON_PREFIX${randomIcon[0]}",
@@ -125,6 +119,8 @@ class CardViewModel(private val context: Context) : ViewModel() {
                 getRandomUniqueCard(position)
                 return@launch
             }
+
+            Thread.sleep(TIME_TO_DROP_CARD)
 
             val cardLvl = Random.nextInt(MIN_LVL_RARE, MAX_LVL_RARE)
             val elixir = getRare(cardLvl)
