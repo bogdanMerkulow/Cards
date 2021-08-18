@@ -83,6 +83,7 @@ class CardsFragment : Fragment() {
     }
 
     private fun onCardClick(position: Int) {
+        binding.randomButton.isEnabled = false
         viewModel.getRandomUniqueCard(position)
     }
 

@@ -142,7 +142,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
             val average = getAverage(currentCardsSet)
 
             viewModelScope.launch(Dispatchers.IO) {
-                Thread.sleep(TIME_TO_END_ANIMATION)
+                Thread.sleep(TIME_TO_DROP_CARD)
                 _averageCost.postValue(average)
                 _readyToNewData.postValue(true)
             }
