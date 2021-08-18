@@ -25,7 +25,6 @@ class CardsFragment : Fragment() {
     private lateinit var adapter: RecyclerViewAdapter<Card>
     private var _binding: CardsFragmentBinding? = null
     private val binding get() = _binding!!
-    private var firstStart: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,10 +77,7 @@ class CardsFragment : Fragment() {
     private fun onRandomButtonClick(clearAnimation: Animation) {
         viewModel.getNewShuffledData()
         binding.randomButton.isEnabled = false
-        if (!firstStart)
-            binding.rvCardList.startAnimation(clearAnimation)
-
-        firstStart = false
+        binding.rvCardList.startAnimation(clearAnimation)
     }
 
     private fun onCardClick(position: Int) {
