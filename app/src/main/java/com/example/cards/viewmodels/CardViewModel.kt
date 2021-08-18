@@ -94,7 +94,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
     private fun getRandomNumbersList(cardsCount: Int, iconsCount: Int): List<Int> {
         val numberList = mutableSetOf<Int>()
 
-        for (i in (iconsCount + 1 - cardsCount)..iconsCount) {
+        for (i in (iconsCount + 1 - cardsCount)..iconsCount + 1) {
             val number = Random.nextInt(1, i)
 
             if (numberList.contains(number))

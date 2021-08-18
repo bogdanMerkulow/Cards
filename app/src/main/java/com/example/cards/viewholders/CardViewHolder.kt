@@ -1,6 +1,8 @@
 package com.example.cards.viewholders
 
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import android.view.animation.TranslateAnimation
@@ -26,14 +28,16 @@ private const val BEYOND_SCREEN = 1200f
 private const val START_POS_X = -210f
 private const val START_POS_Y = -225f
 
-class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
+private fun getInflater(parent: ViewGroup): View = LayoutInflater.from(parent.context)
+    .inflate(R.layout.card_item, parent, false)
+
+class CardViewHolder(parent: ViewGroup) : ViewHolder<Card>(getInflater(parent)) {
     private val elixir: ImageView = itemView.findViewById(R.id.card_elixir)
     private val image: ImageView = itemView.findViewById(R.id.card_image)
     private val lvl: TextView = itemView.findViewById(R.id.card_lvl)
 
     override fun bind(data: Card, listener: (Int) -> Unit) {
         val multiplier = (adapterPosition + 1) * MAGIC_MULTIPLIER
-
         val positionFrom = when (adapterPosition) {
             0 -> Position(DEFAULT_POS_AND_SIZE - adapterPosition, DEFAULT_POS_AND_SIZE - adapterPosition)
             1 -> Position(START_POS_X - adapterPosition, DEFAULT_POS_AND_SIZE - adapterPosition)
