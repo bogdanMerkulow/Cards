@@ -29,7 +29,6 @@ class CardViewModel(private val context: Context) : ViewModel() {
     private val _averageCost: MutableLiveData<Average> = MutableLiveData<Average>()
     private val _readyToNewData: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     private val _newCard: MutableLiveData<NewCard> = MutableLiveData<NewCard>()
-    private val unavailableCards: MutableList<Int> = mutableListOf()
     private val currentCardsSet: MutableList<Card> = mutableListOf()
 
     val data: LiveData<List<Card>>
@@ -81,10 +80,6 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
             val shuffledCards = cards.shuffled()
 
-            shuffledCards.forEach { card ->
-                unavailableCards.add(card.image)
-            }
-
             currentCardsSet.addAll(shuffledCards)
             _data.postValue(shuffledCards)
             _loadedComplete.postValue(true)
@@ -125,17 +120,14 @@ class CardViewModel(private val context: Context) : ViewModel() {
                 context.packageName
             )
 
-            if (iconId in unavailableCards) {
+            if (currentCardsSet.map { it.image == iconId }.contains(true)) {
                 getRandomUniqueCard(position)
                 return@launch
             }
-            
+
             val cardLvl = Random.nextInt(MIN_LVL_RARE, MAX_LVL_RARE)
             val elixir = getRare(cardLvl)
             val newCard = NewCard(elixir, cardLvl, iconId, position)
-
-            unavailableCards.removeAt(position)
-            unavailableCards.add(position, iconId)
 
             currentCardsSet.removeAt(position)
             currentCardsSet.add(position, newCard)
