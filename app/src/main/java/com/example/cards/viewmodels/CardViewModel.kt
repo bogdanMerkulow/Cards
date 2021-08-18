@@ -11,6 +11,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
+private const val START_DELAY = 1200L
+private const val TIME_TO_DROP_CARD = 2400L
+private const val TIME_TO_END_ANIMATION = 3200L
+private const val DEF_TYPE = "drawable"
+private const val ICON_PREFIX: String = "icon"
+private const val ICONS_COUNT: Int = 82
+private const val CARDS_COUNT: Int = 7
+private const val MIN_LVL_RARE: Int = 1
+private const val MAX_LVL_RARE: Int = 11
+
 class CardViewModel(private val context: Context) : ViewModel() {
     private val _data: MutableLiveData<List<Card>> = MutableLiveData<List<Card>>()
     private val _loadedComplete: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
@@ -172,17 +182,5 @@ class CardViewModel(private val context: Context) : ViewModel() {
             in 7..10 -> Color.CYAN
             else -> Color.GRAY
         }
-    }
-
-    companion object {
-        private const val START_DELAY = 1200L
-        private const val TIME_TO_DROP_CARD = 2400L
-        private const val TIME_TO_END_ANIMATION = 3200L
-        private const val DEF_TYPE = "drawable"
-        private const val ICON_PREFIX: String = "icon"
-        private const val ICONS_COUNT: Int = 82
-        private const val CARDS_COUNT: Int = 7
-        private const val MIN_LVL_RARE: Int = 1
-        private const val MAX_LVL_RARE: Int = 11
     }
 }

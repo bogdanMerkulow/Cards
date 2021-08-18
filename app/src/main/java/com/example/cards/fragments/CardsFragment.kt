@@ -20,6 +20,8 @@ import com.example.cards.models.Average
 import com.example.cards.models.Card
 import com.example.cards.viewmodels.CardViewModel
 
+private const val SPAN_COUNT = 4
+
 class CardsFragment : Fragment() {
     private lateinit var viewModel: CardViewModel
     private lateinit var adapter: RecyclerViewAdapter<Card>
@@ -97,8 +99,4 @@ class CardsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = binding.root
-
-    companion object {
-        private const val SPAN_COUNT = 4
-    }
 }

@@ -9,8 +9,23 @@ import android.widget.TextView
 import com.example.cards.R
 import com.example.cards.adapters.ViewHolder
 import com.example.cards.models.Card
+import com.example.cards.models.Position
 import kotlinx.coroutines.*
+import java.lang.Exception
 
+private const val MAGIC_MULTIPLIER = 1.2f
+private const val IMAGE_FADE_MULTIPLIER = 2
+private const val ELIXIR_FADE_MULTIPLIER = 3
+private const val SECOND_ITEM_POS_MULTIPLIER = 2f
+private const val THIRD_ITEM_POS_MULTIPLIER = 3f
+private const val PIVOT_SIZE = 0.5f
+private const val CARD_BACKGROUND_SIZE = -1f
+private const val MINIMUM_SIZE = 0f
+private const val DEFAULT_POS_AND_SIZE = 1f
+private const val ANIMATION_DURATION = 1000L
+private const val BEYOND_SCREEN = 1200f
+private const val START_POS_X = -210f
+private const val START_POS_Y = -225f
 
 class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
     private val elixir: ImageView = itemView.findViewById(R.id.card_elixir)
@@ -18,25 +33,20 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
     private val lvl: TextView = itemView.findViewById(R.id.card_lvl)
 
     override fun bind(data: Card, position: Int, listener: (Int) -> Unit) {
-        val positionFrom = Position(START_POS_X, START_POS_Y)
 
         val multiplier = (position + 1) * MAGIC_MULTIPLIER
 
-        when (position) {
-            0 -> positionFrom.setPos(DEFAULT_POS_AND_SIZE, DEFAULT_POS_AND_SIZE)
-            1 -> positionFrom.setPos(START_POS_X, DEFAULT_POS_AND_SIZE)
-            2 -> positionFrom.setPos(START_POS_X * SECOND_ITEM_POS_MULTIPLIER, DEFAULT_POS_AND_SIZE)
-            3 -> positionFrom.setPos(START_POS_X * THIRD_ITEM_POS_MULTIPLIER, DEFAULT_POS_AND_SIZE)
-            4 -> positionFrom.setPos(DEFAULT_POS_AND_SIZE, START_POS_Y)
-            5 -> positionFrom.setPos(START_POS_X, START_POS_Y)
-            6 -> positionFrom.setPos(START_POS_X * SECOND_ITEM_POS_MULTIPLIER, START_POS_Y)
-            7 -> positionFrom.setPos(START_POS_X * THIRD_ITEM_POS_MULTIPLIER, START_POS_Y)
+        val positionFrom = when (position) {
+            0 -> Position(DEFAULT_POS_AND_SIZE - position, DEFAULT_POS_AND_SIZE - position)
+            1 -> Position(START_POS_X - position, DEFAULT_POS_AND_SIZE - position)
+            2 -> Position(START_POS_X * SECOND_ITEM_POS_MULTIPLIER - position, DEFAULT_POS_AND_SIZE - position)
+            3 -> Position(START_POS_X * THIRD_ITEM_POS_MULTIPLIER - position, DEFAULT_POS_AND_SIZE - position)
+            4 -> Position(DEFAULT_POS_AND_SIZE - position, START_POS_Y - position)
+            5 -> Position(START_POS_X - position, START_POS_Y - position)
+            6 -> Position(START_POS_X * SECOND_ITEM_POS_MULTIPLIER - position, START_POS_Y - position)
+            7 -> Position(START_POS_X * THIRD_ITEM_POS_MULTIPLIER - position, START_POS_Y - position)
+            else -> throw Exception()
         }
-
-        positionFrom.setPos(
-            positionFrom.x - position,
-            positionFrom.y - position
-        )
 
         val setCardOnStartPosAnimation = TranslateAnimation(
             positionFrom.x, positionFrom.x,
@@ -175,31 +185,5 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
         }
 
         itemView.startAnimation(setCardOnStartPosAnimation)
-    }
-
-    inner class Position(
-        var x: Float,
-        var y: Float
-    ) {
-        fun setPos(x: Float, y: Float) {
-            this.x = x
-            this.y = y
-        }
-    }
-
-    companion object {
-        private const val MAGIC_MULTIPLIER = 1.2f
-        private const val IMAGE_FADE_MULTIPLIER = 2
-        private const val ELIXIR_FADE_MULTIPLIER = 3
-        private const val SECOND_ITEM_POS_MULTIPLIER = 2f
-        private const val THIRD_ITEM_POS_MULTIPLIER = 3f
-        private const val PIVOT_SIZE = 0.5f
-        private const val CARD_BACKGROUND_SIZE = -1f
-        private const val MINIMUM_SIZE = 0f
-        private const val DEFAULT_POS_AND_SIZE = 1f
-        private const val ANIMATION_DURATION = 1000L
-        private const val BEYOND_SCREEN = 1200f
-        private const val START_POS_X = -210f
-        private const val START_POS_Y = -225f
     }
 }
