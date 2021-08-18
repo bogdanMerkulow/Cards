@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.example.cards.R
 import com.example.cards.models.Average
 import com.example.cards.models.Card
+import com.example.cards.models.NewCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.random.Random
@@ -15,6 +16,9 @@ class CardViewModel(private val context: Context) : ViewModel() {
     private val _loadedComplete: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     private val _averageCost: MutableLiveData<Average> = MutableLiveData<Average>()
     private val _readyToNewData: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    private val _newCard: MutableLiveData<NewCard> = MutableLiveData<NewCard>()
+    private val unavailableCards: MutableList<Int> = mutableListOf()
+    private val currentCardsSet: MutableList<Card> = mutableListOf()
 
     val data: LiveData<List<Card>>
         get() = _data
@@ -28,21 +32,23 @@ class CardViewModel(private val context: Context) : ViewModel() {
     val readyToNewData: LiveData<Boolean>
         get() = _readyToNewData
 
+    val newCard: LiveData<NewCard>
+        get() = _newCard
+
     fun getNewShuffledData() {
         viewModelScope.launch(Dispatchers.IO) {
             val cards = mutableListOf<Card>()
             var iconsList = mutableListOf<Int>()
-            val average = Average(0, 0, 0)
 
             _readyToNewData.postValue(false)
 
 
             getRandomNumbersList(CARDS_COUNT, ICONS_COUNT).forEach { randomNumber ->
                 val iconId = context.resources.getIdentifier(
-                        "$ICON_PREFIX$randomNumber",
-                                DEF_TYPE,
-                                context.packageName
-                        )
+                    "$ICON_PREFIX$randomNumber",
+                    DEF_TYPE,
+                    context.packageName
+                )
 
                 iconsList.add(iconId)
             }
@@ -57,15 +63,18 @@ class CardViewModel(private val context: Context) : ViewModel() {
                 cards.add(Card(elixir, cardLvl, icon))
             }
 
-            average.cost = cards.map { it.lvl }.sum()
-
-            average.cost = average.cost / CARDS_COUNT
-            average.elixir = getRare(average.cost)
-            average.rareColor = getRareColor(average.cost)
+            val average = getAverage(cards)
 
             Thread.sleep(START_DELAY)
 
-            _data.postValue(cards.shuffled())
+            val shuffledCards = cards.shuffled()
+
+            shuffledCards.forEach { card ->
+                unavailableCards.add(card.image)
+            }
+
+            currentCardsSet.addAll(shuffledCards)
+            _data.postValue(shuffledCards)
             _loadedComplete.postValue(true)
 
             viewModelScope.launch(Dispatchers.IO) {
@@ -94,6 +103,61 @@ class CardViewModel(private val context: Context) : ViewModel() {
         return listOf()
     }
 
+    fun getRandomUniqueCard(position: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _loadedComplete.postValue(false)
+
+            val randomIcon = getRandomNumbersList(1, ICONS_COUNT)
+            if (randomIcon[0] in unavailableCards) {
+                getRandomUniqueCard(position)
+                return@launch
+            }
+
+            Thread.sleep(TIME_TO_DROP_CARD)
+
+            val iconId = context.resources.getIdentifier(
+                "$ICON_PREFIX${randomIcon[0]}",
+                DEF_TYPE,
+                context.packageName
+            )
+
+            if (iconId in unavailableCards) {
+                getRandomUniqueCard(position)
+                return@launch
+            }
+
+            val cardLvl = Random.nextInt(MIN_LVL_RARE, MAX_LVL_RARE)
+            val elixir = getRare(cardLvl)
+            val newCard = NewCard(elixir, cardLvl, iconId, position)
+
+            unavailableCards.removeAt(position)
+            unavailableCards.add(position, iconId)
+
+            currentCardsSet.removeAt(position)
+            currentCardsSet.add(position, newCard)
+
+            val average = getAverage(currentCardsSet)
+
+            viewModelScope.launch(Dispatchers.IO) {
+                Thread.sleep(TIME_TO_END_ANIMATION)
+                _averageCost.postValue(average)
+                _readyToNewData.postValue(true)
+            }
+
+            _newCard.postValue(newCard)
+        }
+    }
+
+    private fun getAverage(cards: List<Card>): Average {
+        val average = Average(0, 0, 0)
+        average.cost = cards.map { it.lvl }.sum()
+        average.cost = average.cost / CARDS_COUNT
+        average.elixir = getRare(average.cost)
+        average.rareColor = getRareColor(average.cost)
+
+        return average
+    }
+
     private fun getRare(value: Int): Int {
         return when (value) {
             in 1..2 -> R.drawable.elixir_common
@@ -116,6 +180,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
     companion object {
         private const val START_DELAY = 1200L
+        private const val TIME_TO_DROP_CARD = 2400L
         private const val TIME_TO_END_ANIMATION = 3200L
         private const val DEF_TYPE = "drawable"
         private const val ICON_PREFIX: String = "icon"

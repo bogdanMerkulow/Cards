@@ -8,7 +8,8 @@ import java.util.*
 
 class RecyclerViewAdapter<T>(
     private val viewHolderFactory: ViewHolderFactory<T>,
-    private val layoutId: Int
+    private val layoutId: Int,
+    private val listener: (Int) -> Unit = {}
 ) : RecyclerView.Adapter<ViewHolder<T>>(), ItemTouchHelperAdapter {
 
     private var items: MutableList<T> = mutableListOf()
@@ -16,6 +17,13 @@ class RecyclerViewAdapter<T>(
     fun addItems(items: List<T>) {
         this.items = items as MutableList<T>
         notifyDataSetChanged()
+    }
+
+    fun replaceItem(item: T, pos: Int) {
+        items.removeAt(pos)
+        items.add(pos, item)
+
+        notifyItemChanged(pos)
     }
 
     override fun getItemViewType(viewType: Int): Int = layoutId
@@ -28,7 +36,7 @@ class RecyclerViewAdapter<T>(
     }
 
     override fun onBindViewHolder(holder: ViewHolder<T>, position: Int) {
-        holder.bind(items[position], position)
+        holder.bind(items[position], position, listener)
     }
 
     override fun getItemCount(): Int {

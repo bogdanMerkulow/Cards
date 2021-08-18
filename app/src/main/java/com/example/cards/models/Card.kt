@@ -1,7 +1,7 @@
 package com.example.cards.models
 
-data class Card(
-    val rare: Int,
-    val lvl: Int,
-    val image: Int
+open class Card(
+    open val rare: Int,
+    open val lvl: Int,
+    open val image: Int
 )

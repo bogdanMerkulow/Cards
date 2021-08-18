@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -47,6 +46,7 @@ class CardsFragment : Fragment() {
         adapter = RecyclerViewAdapter(
             CardViewHolderFactory(),
             R.layout.card_item,
+            this::onCardClick
         )
 
         val touchHelper = ItemTouchHelper(SimpleItemTouchHelperCallback(adapter))
@@ -58,8 +58,8 @@ class CardsFragment : Fragment() {
             adapter.addItems(data)
         }
 
-        viewModel.loadedComplete.observe(viewLifecycleOwner) { isComplete ->
-            setLoader(isComplete)
+        viewModel.loadedComplete.observe(viewLifecycleOwner) {
+            binding.costLine.visibility = View.INVISIBLE
         }
 
         viewModel.averageCost.observe(viewLifecycleOwner) { average ->
@@ -68,6 +68,10 @@ class CardsFragment : Fragment() {
 
         viewModel.readyToNewData.observe(viewLifecycleOwner) { ready ->
             binding.randomButton.isEnabled = ready
+        }
+
+        viewModel.newCard.observe(viewLifecycleOwner) { card ->
+            adapter.replaceItem(card, card.position)
         }
     }
 
@@ -80,9 +84,8 @@ class CardsFragment : Fragment() {
         firstStart = false
     }
 
-    private fun setLoader(isComplete: Boolean) {
-        binding.deck.isVisible = isComplete
-        binding.costLine.visibility = View.INVISIBLE
+    private fun onCardClick(position: Int) {
+        viewModel.getRandomUniqueCard(position)
     }
 
     private fun setAverage(average: Average) {

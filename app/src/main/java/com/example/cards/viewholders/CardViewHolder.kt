@@ -17,15 +17,7 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
     private val image: ImageView = itemView.findViewById(R.id.card_image)
     private val lvl: TextView = itemView.findViewById(R.id.card_lvl)
 
-    override fun bind(data: Card, position: Int) {
-        itemView.apply {
-            lvl.text = data.lvl.toString()
-            elixir.setImageResource(data.rare)
-            elixir.visibility = View.INVISIBLE
-            lvl.visibility = View.INVISIBLE
-            image.setImageResource(R.drawable.card_back)
-        }
-
+    override fun bind(data: Card, position: Int, listener: (Int) -> Unit) {
         val positionFrom = Position(START_POS_X, START_POS_Y)
 
         val multiplier = (position + 1) * MAGIC_MULTIPLIER
@@ -70,8 +62,20 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             override fun onAnimationRepeat(animation: Animation?) {}
         })
 
-        val flipCardAnimation = ScaleAnimation(
+        val flipCardToFrontAnimation = ScaleAnimation(
             CARD_BACKGROUND_SIZE, DEFAULT_POS_AND_SIZE,
+            DEFAULT_POS_AND_SIZE, DEFAULT_POS_AND_SIZE,
+            Animation.RELATIVE_TO_SELF,
+            PIVOT_SIZE,
+            Animation.RELATIVE_TO_SELF,
+            PIVOT_SIZE
+        ).apply {
+            duration = ANIMATION_DURATION
+            fillAfter = true
+        }
+
+        val flipCardToBackAnimation = ScaleAnimation(
+            DEFAULT_POS_AND_SIZE, CARD_BACKGROUND_SIZE,
             DEFAULT_POS_AND_SIZE, DEFAULT_POS_AND_SIZE,
             Animation.RELATIVE_TO_SELF,
             PIVOT_SIZE,
@@ -94,18 +98,25 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             fillAfter = true
         }
 
+        val dropCardAnimation = TranslateAnimation(
+            DEFAULT_POS_AND_SIZE, DEFAULT_POS_AND_SIZE,
+            DEFAULT_POS_AND_SIZE, BEYOND_SCREEN
+        ).apply {
+            duration = ANIMATION_DURATION * 2
+        }
+
         placeCardToEndPos.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {}
 
             override fun onAnimationEnd(animation: Animation?) {
-                itemView.startAnimation(flipCardAnimation)
+                itemView.startAnimation(flipCardToFrontAnimation)
             }
 
             override fun onAnimationRepeat(animation: Animation?) {}
 
         })
 
-        flipCardAnimation.setAnimationListener(object : Animation.AnimationListener {
+        flipCardToFrontAnimation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {
                 CoroutineScope(Dispatchers.Main + Job()).launch {
                     withContext(Dispatchers.IO) {
@@ -127,6 +138,41 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             override fun onAnimationRepeat(animation: Animation?) {}
 
         })
+
+        flipCardToBackAnimation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation?) {
+                CoroutineScope(Dispatchers.Main + Job()).launch {
+                    withContext(Dispatchers.IO) {
+                        Thread.sleep(ANIMATION_DURATION / IMAGE_FADE_MULTIPLIER)
+                        withContext(Dispatchers.Main) {
+                            lvl.text = null
+                            elixir.setImageResource(0)
+                            image.setImageResource(R.drawable.card_back)
+                        }
+                    }
+                }
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                itemView.startAnimation(dropCardAnimation)
+            }
+
+            override fun onAnimationRepeat(animation: Animation?) {}
+
+        })
+
+        itemView.apply {
+            lvl.text = data.lvl.toString()
+            elixir.setImageResource(data.rare)
+            elixir.visibility = View.INVISIBLE
+            lvl.visibility = View.INVISIBLE
+            image.setImageResource(R.drawable.card_back)
+
+            setOnClickListener {
+                listener(position)
+                itemView.startAnimation(flipCardToBackAnimation)
+            }
+        }
 
         itemView.startAnimation(setCardOnStartPosAnimation)
     }
@@ -152,6 +198,7 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
         private const val MINIMUM_SIZE = 0f
         private const val DEFAULT_POS_AND_SIZE = 1f
         private const val ANIMATION_DURATION = 1000L
+        private const val BEYOND_SCREEN = 1200f
         private const val START_POS_X = -210f
         private const val START_POS_Y = -225f
     }
