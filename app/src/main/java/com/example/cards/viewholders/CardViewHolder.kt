@@ -11,7 +11,6 @@ import com.example.cards.adapters.ViewHolder
 import com.example.cards.models.Card
 import com.example.cards.models.Position
 import kotlinx.coroutines.*
-import java.lang.Exception
 
 private const val MAGIC_MULTIPLIER = 1.2f
 private const val IMAGE_FADE_MULTIPLIER = 2
@@ -32,19 +31,18 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
     private val image: ImageView = itemView.findViewById(R.id.card_image)
     private val lvl: TextView = itemView.findViewById(R.id.card_lvl)
 
-    override fun bind(data: Card, position: Int, listener: (Int) -> Unit) {
+    override fun bind(data: Card, listener: (Int) -> Unit) {
+        val multiplier = (adapterPosition + 1) * MAGIC_MULTIPLIER
 
-        val multiplier = (position + 1) * MAGIC_MULTIPLIER
-
-        val positionFrom = when (position) {
-            0 -> Position(DEFAULT_POS_AND_SIZE - position, DEFAULT_POS_AND_SIZE - position)
-            1 -> Position(START_POS_X - position, DEFAULT_POS_AND_SIZE - position)
-            2 -> Position(START_POS_X * SECOND_ITEM_POS_MULTIPLIER - position, DEFAULT_POS_AND_SIZE - position)
-            3 -> Position(START_POS_X * THIRD_ITEM_POS_MULTIPLIER - position, DEFAULT_POS_AND_SIZE - position)
-            4 -> Position(DEFAULT_POS_AND_SIZE - position, START_POS_Y - position)
-            5 -> Position(START_POS_X - position, START_POS_Y - position)
-            6 -> Position(START_POS_X * SECOND_ITEM_POS_MULTIPLIER - position, START_POS_Y - position)
-            7 -> Position(START_POS_X * THIRD_ITEM_POS_MULTIPLIER - position, START_POS_Y - position)
+        val positionFrom = when (adapterPosition) {
+            0 -> Position(DEFAULT_POS_AND_SIZE - adapterPosition, DEFAULT_POS_AND_SIZE - adapterPosition)
+            1 -> Position(START_POS_X - adapterPosition, DEFAULT_POS_AND_SIZE - adapterPosition)
+            2 -> Position(START_POS_X * SECOND_ITEM_POS_MULTIPLIER - adapterPosition, DEFAULT_POS_AND_SIZE - adapterPosition)
+            3 -> Position(START_POS_X * THIRD_ITEM_POS_MULTIPLIER - adapterPosition, DEFAULT_POS_AND_SIZE - adapterPosition)
+            4 -> Position(DEFAULT_POS_AND_SIZE - adapterPosition, START_POS_Y - adapterPosition)
+            5 -> Position(START_POS_X - adapterPosition, START_POS_Y - adapterPosition)
+            6 -> Position(START_POS_X * SECOND_ITEM_POS_MULTIPLIER - adapterPosition, START_POS_Y - adapterPosition)
+            7 -> Position(START_POS_X * THIRD_ITEM_POS_MULTIPLIER - adapterPosition, START_POS_Y - adapterPosition)
             else -> throw Exception()
         }
 
@@ -59,7 +57,7 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             positionFrom.x, DEFAULT_POS_AND_SIZE,
             positionFrom.y, DEFAULT_POS_AND_SIZE
         ).apply {
-            duration = ((position * ANIMATION_DURATION) / multiplier).toLong()
+            duration = ((adapterPosition * ANIMATION_DURATION) / multiplier).toLong()
         }
 
         setCardOnStartPosAnimation.setAnimationListener(object : Animation.AnimationListener {
@@ -179,9 +177,11 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             image.setImageResource(R.drawable.card_back)
 
             setOnClickListener {
-                listener(position)
+                listener(adapterPosition)
                 itemView.startAnimation(flipCardToBackAnimation)
             }
+
+            setOnLongClickListener { false }
         }
 
         itemView.startAnimation(setCardOnStartPosAnimation)

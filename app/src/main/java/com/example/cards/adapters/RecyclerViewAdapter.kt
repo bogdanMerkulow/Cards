@@ -36,7 +36,7 @@ class RecyclerViewAdapter<T>(
     }
 
     override fun onBindViewHolder(holder: ViewHolder<T>, position: Int) {
-        holder.bind(items[position], position, listener)
+        holder.bind(items[position], listener)
     }
 
     override fun getItemCount(): Int {
@@ -49,6 +49,7 @@ class RecyclerViewAdapter<T>(
         } else {
             Collections.swap(items, toPosition, fromPosition)
         }
+
         notifyItemMoved(fromPosition, toPosition)
         return true
     }
