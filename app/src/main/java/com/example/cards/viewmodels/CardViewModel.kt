@@ -107,10 +107,10 @@ class CardViewModel(private val context: Context) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             _loadedComplete.postValue(false)
 
-            val randomIcon = getRandomNumbersList(1, ICONS_COUNT)
+            val randomIcon = getRandomNumbersList(1, ICONS_COUNT)[0]
 
             val iconId = context.resources.getIdentifier(
-                "$ICON_PREFIX${randomIcon[0]}",
+                "$ICON_PREFIX$randomIcon",
                 DEF_TYPE,
                 context.packageName
             )
