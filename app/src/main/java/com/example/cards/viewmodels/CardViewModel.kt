@@ -2,6 +2,7 @@ package com.example.cards.viewmodels
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.cards.R
 import com.example.cards.models.Average
@@ -50,9 +51,9 @@ class CardViewModel(private val context: Context) : ViewModel() {
             val cards = mutableListOf<Card>()
             var iconsList = mutableListOf<Int>()
 
+            currentCardsSet.clear()
             _readyToNewData.postValue(false)
-
-
+            
             getRandomNumbersList(CARDS_COUNT, ICONS_COUNT).forEach { randomNumber ->
                 val iconId = context.resources.getIdentifier(
                     "$ICON_PREFIX$randomNumber",
@@ -137,6 +138,8 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
             currentCardsSet.removeAt(position)
             currentCardsSet.add(position, newCard)
+
+            Log.e("test", currentCardsSet.count().toString())
 
             val average = getAverage(currentCardsSet)
 
