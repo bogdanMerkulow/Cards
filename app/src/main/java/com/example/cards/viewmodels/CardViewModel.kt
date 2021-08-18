@@ -53,7 +53,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
             currentCardsSet.clear()
             _readyToNewData.postValue(false)
-            
+
             getRandomNumbersList(CARDS_COUNT, ICONS_COUNT).forEach { randomNumber ->
                 val iconId = context.resources.getIdentifier(
                     "$ICON_PREFIX$randomNumber",
@@ -138,9 +138,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
             currentCardsSet.removeAt(position)
             currentCardsSet.add(position, newCard)
-
-            Log.e("test", currentCardsSet.count().toString())
-
+            
             val average = getAverage(currentCardsSet)
 
             viewModelScope.launch(Dispatchers.IO) {
