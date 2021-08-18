@@ -10,6 +10,7 @@ import com.example.cards.models.Card
 import com.example.cards.models.NewCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.math.ceil
 import kotlin.random.Random
 
 private const val START_DELAY = 1200L
@@ -97,7 +98,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
     }
 
     private fun getRandomNumbersList(cardsCount: Int, iconsCount: Int): List<Int> {
-        val numberList = mutableListOf<Int>()
+        val numberList = mutableSetOf<Int>()
 
         for (i in (iconsCount + 1 - cardsCount)..(iconsCount + 1)) {
             val number = Random.nextInt(1, i)
@@ -107,6 +108,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
             else
                 numberList.add(number)
         }
+
         return numberList.shuffled()
     }
 
@@ -127,9 +129,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
                 getRandomUniqueCard(position)
                 return@launch
             }
-
-            Thread.sleep(TIME_TO_DROP_CARD)
-
+            
             val cardLvl = Random.nextInt(MIN_LVL_RARE, MAX_LVL_RARE)
             val elixir = getRare(cardLvl)
             val newCard = NewCard(elixir, cardLvl, iconId, position)
@@ -139,6 +139,8 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
             currentCardsSet.removeAt(position)
             currentCardsSet.add(position, newCard)
+
+            Thread.sleep(TIME_TO_DROP_CARD)
 
             val average = getAverage(currentCardsSet)
 
@@ -155,7 +157,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
     private fun getAverage(cards: List<Card>): Average {
         val average = Average(0, 0, 0)
         average.cost = cards.map { it.lvl }.sum()
-        average.cost = average.cost / CARDS_COUNT
+        average.cost = ceil((average.cost.toDouble() / CARDS_COUNT + 1)).toInt()
         average.elixir = getRare(average.cost)
         average.rareColor = getRareColor(average.cost)
 
