@@ -138,7 +138,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
             currentCardsSet.removeAt(position)
             currentCardsSet.add(position, newCard)
-            
+
             val average = getAverage(currentCardsSet)
 
             viewModelScope.launch(Dispatchers.IO) {
@@ -167,7 +167,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
             in 3..4 -> R.drawable.elixir_rare
             in 5..6 -> R.drawable.elixir_epic
             in 7..10 -> R.drawable.elixir_legendary
-            else -> R.drawable.elixir_common
+            else -> throw IndexOutOfBoundsException("elixir id: $value not found")
         }
     }
 
@@ -177,7 +177,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
             in 3..4 -> Color.YELLOW
             in 5..6 -> Color.MAGENTA
             in 7..10 -> Color.CYAN
-            else -> Color.GRAY
+            else -> throw IndexOutOfBoundsException("color id: $value not found")
         }
     }
 }

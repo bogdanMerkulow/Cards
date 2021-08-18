@@ -43,7 +43,7 @@ class CardViewHolder(itemView: View) : ViewHolder<Card>(itemView) {
             5 -> Position(START_POS_X - adapterPosition, START_POS_Y - adapterPosition)
             6 -> Position(START_POS_X * SECOND_ITEM_POS_MULTIPLIER - adapterPosition, START_POS_Y - adapterPosition)
             7 -> Position(START_POS_X * THIRD_ITEM_POS_MULTIPLIER - adapterPosition, START_POS_Y - adapterPosition)
-            else -> throw Exception()
+            else -> throw IndexOutOfBoundsException("card position: $adapterPosition not found")
         }
 
         val setCardOnStartPosAnimation = TranslateAnimation(
