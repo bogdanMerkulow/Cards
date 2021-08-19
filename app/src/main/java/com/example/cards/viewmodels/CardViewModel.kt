@@ -2,6 +2,7 @@ package com.example.cards.viewmodels
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.cards.R
 import com.example.cards.models.Average
@@ -95,7 +96,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
     private fun getRandomNumbersList(cardsCount: Int, iconsCount: Int): List<Int> {
         val numberList = mutableSetOf<Int>()
 
-        for (i in (iconsCount + 1 - cardsCount)..iconsCount + 1) {
+        for (i in (iconsCount - cardsCount)..iconsCount) {
             val number = Random.nextInt(1, i)
 
             if (numberList.contains(number))
