@@ -3,6 +3,7 @@ package com.example.cards.adapters
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cards.adapters.ViewHolderFactory
+import com.example.cards.extections.swap
 import java.util.*
 
 class RecyclerViewAdapter<T>(
@@ -36,7 +37,7 @@ class RecyclerViewAdapter<T>(
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
-        Collections.swap(items, fromPosition, toPosition)
+        items.swap(fromPosition, toPosition)
 
         notifyItemMoved(fromPosition, toPosition)
         return true
