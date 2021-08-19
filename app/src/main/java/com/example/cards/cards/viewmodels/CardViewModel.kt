@@ -55,7 +55,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
             _loadedComplete.postValue(View.INVISIBLE)
             _readyToNewData.postValue(false)
 
-            val iconsList = getRandomNumbersList(CARDS_COUNT, ICONS_COUNT).map { context.resources.getIdentifier(
+            val iconsList = getRandomNumbersList().map { context.resources.getIdentifier(
                 "$ICON_PREFIX$it",
                 DEF_TYPE,
                 context.packageName
@@ -82,10 +82,10 @@ class CardViewModel(private val context: Context) : ViewModel() {
         }
     }
 
-    private fun getRandomNumbersList(cardsCount: Int, iconsCount: Int): List<Int> {
+    private fun getRandomNumbersList(): List<Int> {
         val numberList = mutableSetOf<Int>()
 
-        for (i in (iconsCount - (cardsCount - 1))..iconsCount) {
+        for (i in (ICONS_COUNT - (CARDS_COUNT - 1))..ICONS_COUNT) {
             val number = Random.nextInt(1, i)
 
             if (numberList.contains(number))
