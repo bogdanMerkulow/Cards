@@ -1,8 +1,7 @@
-package com.example.cards.viewmodels
+package com.example.cards.cards.viewmodels
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.cards.R
 import com.example.cards.models.Average

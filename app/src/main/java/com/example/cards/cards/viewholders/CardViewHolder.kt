@@ -1,4 +1,4 @@
-package com.example.cards.viewholders
+package com.example.cards.cards.viewholders
 
 import android.view.LayoutInflater
 import android.view.View

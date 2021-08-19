@@ -2,7 +2,7 @@ package com.example.cards
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.cards.fragments.CardsFragment
+import com.example.cards.cards.fragments.CardsFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

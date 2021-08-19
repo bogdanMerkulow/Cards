@@ -1,4 +1,4 @@
-package com.example.cards.fragments
+package com.example.cards.cards.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,19 +8,17 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.cards.R
 import com.example.cards.adapters.RecyclerViewAdapter
 import com.example.cards.adapters.SimpleItemTouchHelperCallback
+import com.example.cards.cards.factories.CardViewHolderFactory
+import com.example.cards.cards.viewmodels.CardViewModel
 import com.example.cards.databinding.CardsFragmentBinding
-import com.example.cards.factories.CardViewHolderFactory
 import com.example.cards.factories.ViewModelFactory
 import com.example.cards.models.Average
 import com.example.cards.models.Card
-import com.example.cards.viewmodels.CardViewModel
-import kotlin.properties.ReadWriteProperty
 
 private const val SPAN_COUNT = 4
 
@@ -68,7 +66,7 @@ class CardsFragment : Fragment() {
             loadedComplete.observe(viewLifecycleOwner) {
                 binding.costLine.visibility = View.INVISIBLE
             }
-            
+
             readyToNewData.observe(viewLifecycleOwner) { ready ->
                 binding.randomButton.isEnabled = ready
             }
