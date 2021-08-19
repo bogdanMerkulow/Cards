@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.example.cards.R
 import com.example.cards.models.Average
 import com.example.cards.models.Card
+import com.example.cards.models.GameCard
 import com.example.cards.models.NewCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,14 +24,14 @@ private const val MIN_LVL_RARE: Int = 1
 private const val MAX_LVL_RARE: Int = 11
 
 class CardViewModel(private val context: Context) : ViewModel() {
-    private val _data: MutableLiveData<List<Card>> = MutableLiveData<List<Card>>()
+    private val _data: MutableLiveData<List<GameCard>> = MutableLiveData<List<GameCard>>()
     private val _loadedComplete: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     private val _averageCost: MutableLiveData<Average> = MutableLiveData<Average>()
     private val _readyToNewData: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     private val _newCard: MutableLiveData<NewCard> = MutableLiveData<NewCard>()
     private val currentCardsSet: MutableList<Card> = mutableListOf()
 
-    val data: LiveData<List<Card>>
+    val data: LiveData<List<GameCard>>
         get() = _data
 
     val loadedComplete: LiveData<Boolean>
@@ -47,7 +48,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
     fun getNewShuffledData() {
         viewModelScope.launch(Dispatchers.IO) {
-            val cards = mutableListOf<Card>()
+            val cards = mutableListOf<GameCard>()
             var iconsList = mutableListOf<Int>()
 
             currentCardsSet.clear()
@@ -70,7 +71,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
                 val elixir = getRare(cardLvl)
 
-                cards.add(Card(elixir, cardLvl, icon))
+                cards.add(GameCard(elixir, cardLvl, icon))
             }
 
             val average = getAverage(cards)

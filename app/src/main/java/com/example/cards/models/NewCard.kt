@@ -1,6 +1,6 @@
 package com.example.cards.models
 
-class NewCard(
+data class NewCard(
     override val rare: Int,
     override val lvl: Int,
     override val image: Int,
