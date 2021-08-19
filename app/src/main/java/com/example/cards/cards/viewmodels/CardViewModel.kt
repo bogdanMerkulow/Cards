@@ -3,11 +3,13 @@ package com.example.cards.cards.viewmodels
 import android.content.Context
 import android.graphics.Color
 import android.view.View
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.cards.R
 import com.example.cards.models.Average
 import com.example.cards.models.Card
-import com.example.cards.models.GameCard
 import com.example.cards.models.NewCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,14 +27,14 @@ private const val MIN_LVL_RARE: Int = 1
 private const val MAX_LVL_RARE: Int = 11
 
 class CardViewModel(private val context: Context) : ViewModel() {
-    private val _data: MutableLiveData<List<GameCard>> = MutableLiveData<List<GameCard>>()
+    private val _data: MutableLiveData<List<Card>> = MutableLiveData<List<Card>>()
     private val _loadedComplete: MutableLiveData<Int> = MutableLiveData<Int>()
     private val _averageCost: MutableLiveData<Average> = MutableLiveData<Average>()
     private val _readyToNewData: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     private val _newCard: MutableLiveData<NewCard> = MutableLiveData<NewCard>()
     private val currentCardsSet: MutableList<Card> = mutableListOf()
 
-    val data: LiveData<List<GameCard>>
+    val data: LiveData<List<Card>>
         get() = _data
 
     val loadedComplete: LiveData<Int>
@@ -63,7 +65,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
                 val cardLvl = Random.nextInt(MIN_LVL_RARE, MAX_LVL_RARE)
                 val elixir = getRare(cardLvl)
 
-                GameCard(elixir, cardLvl, icon)
+                Card(elixir, cardLvl, icon)
             }
 
             val average = getAverage(cards)
@@ -117,10 +119,10 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
             val cardLvl = Random.nextInt(MIN_LVL_RARE, MAX_LVL_RARE)
             val elixir = getRare(cardLvl)
-            val newCard = NewCard(elixir, cardLvl, iconId, position)
+            val newCard = NewCard(Card(elixir, cardLvl, iconId), position)
 
             currentCardsSet.removeAt(position)
-            currentCardsSet.add(position, newCard)
+            currentCardsSet.add(position, newCard.card)
 
             val average = getAverage(currentCardsSet)
 

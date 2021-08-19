@@ -71,8 +71,8 @@ class CardsFragment : Fragment() {
                 binding.randomButton.isEnabled = ready
             }
 
-            newCard.observe(viewLifecycleOwner) { card ->
-                adapter.replaceItem(card, card.position)
+            newCard.observe(viewLifecycleOwner) { newCard ->
+                adapter.replaceItem(newCard.card, newCard.position)
             }
         }
     }
