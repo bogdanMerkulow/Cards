@@ -1,6 +1,9 @@
 package com.example.cards.viewholders
 
+import android.R.attr.x
+import android.R.attr.y
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
@@ -13,6 +16,7 @@ import com.example.cards.adapters.ViewHolder
 import com.example.cards.models.Card
 import com.example.cards.models.Position
 import kotlinx.coroutines.*
+
 
 private const val MAGIC_MULTIPLIER = 1.2f
 private const val IMAGE_FADE_MULTIPLIER = 2
@@ -117,6 +121,30 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) : V
             duration = ANIMATION_DURATION * 2
         }
 
+        val dragScaleAnimation = ScaleAnimation(
+            DEFAULT_POS_AND_SIZE, 1.1f,
+            DEFAULT_POS_AND_SIZE, 1.1f,
+            Animation.RELATIVE_TO_SELF,
+            PIVOT_SIZE,
+            Animation.RELATIVE_TO_SELF,
+            PIVOT_SIZE
+        ).apply {
+            duration = ANIMATION_DURATION / ELIXIR_FADE_MULTIPLIER
+            fillAfter = true
+        }
+
+        val cancelDragScaleAnimation = ScaleAnimation(
+            1.1f, DEFAULT_POS_AND_SIZE,
+            1.1f, DEFAULT_POS_AND_SIZE,
+            Animation.RELATIVE_TO_SELF,
+            PIVOT_SIZE,
+            Animation.RELATIVE_TO_SELF,
+            PIVOT_SIZE
+        ).apply {
+            duration = 100
+            fillAfter = true
+        }
+
         placeCardToEndPos.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {}
 
@@ -186,6 +214,16 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) : V
             }
 
             setOnLongClickListener { false }
+        }
+
+        itemView.setOnTouchListener { _, event ->
+            when (event!!.action) {
+                MotionEvent.ACTION_DOWN -> itemView.startAnimation(dragScaleAnimation)
+                MotionEvent.ACTION_CANCEL -> itemView.startAnimation(cancelDragScaleAnimation)
+                MotionEvent.ACTION_UP -> itemView.startAnimation(cancelDragScaleAnimation)
+            }
+
+            true
         }
 
         itemView.startAnimation(setCardOnStartPosAnimation)
