@@ -96,7 +96,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
     }
 
     private tailrec fun randomCard(): Int {
-        val randomIcon = getRandomNumbersList(1, ICONS_COUNT)[0]
+        val randomIcon = Random.nextInt(1, CARDS_COUNT)
 
         val iconId = context.resources.getIdentifier(
             "$ICON_PREFIX$randomIcon",
