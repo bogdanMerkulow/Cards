@@ -1,7 +1,6 @@
 package com.example.cards.viewholders
 
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
@@ -31,11 +30,11 @@ private const val BEYOND_SCREEN = 1200f
 private const val START_POS_X = -210f
 private const val START_POS_Y = -225f
 
-private fun getView(parent: ViewGroup): View = LayoutInflater.from(parent.context)
+private fun createView(parent: ViewGroup): View = LayoutInflater.from(parent.context)
     .inflate(R.layout.card_item, parent, false)
 
 class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
-    ViewHolder<Card>(getView(parent)) {
+    ViewHolder<Card>(createView(parent)) {
     private val elixir: ImageView = itemView.findViewById(R.id.card_elixir)
     private val image: ImageView = itemView.findViewById(R.id.card_image)
     private val lvl: TextView = itemView.findViewById(R.id.card_lvl)
