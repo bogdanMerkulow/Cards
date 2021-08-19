@@ -19,7 +19,7 @@ private const val TIME_TO_END_ANIMATION = 3200L
 private const val DEF_TYPE = "drawable"
 private const val ICON_PREFIX: String = "icon"
 private const val ICONS_COUNT: Int = 82
-private const val CARDS_COUNT: Int = 7
+private const val CARDS_COUNT: Int = 8
 private const val MIN_LVL_RARE: Int = 1
 private const val MAX_LVL_RARE: Int = 11
 
@@ -91,7 +91,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
     private fun getRandomNumbersList(cardsCount: Int, iconsCount: Int): List<Int> {
         val numberList = mutableSetOf<Int>()
 
-        for (i in (iconsCount - cardsCount)..iconsCount) {
+        for (i in (iconsCount - (cardsCount - 1))..iconsCount) {
             val number = Random.nextInt(1, i)
 
             if (numberList.contains(number))
