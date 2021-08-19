@@ -28,10 +28,10 @@ private const val BEYOND_SCREEN = 1200f
 private const val START_POS_X = -210f
 private const val START_POS_Y = -225f
 
-private fun getInflater(parent: ViewGroup): View = LayoutInflater.from(parent.context)
+private fun getView(parent: ViewGroup): View = LayoutInflater.from(parent.context)
     .inflate(R.layout.card_item, parent, false)
 
-class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) : ViewHolder<Card>(getInflater(parent)) {
+class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) : ViewHolder<Card>(getView(parent)) {
     private val elixir: ImageView = itemView.findViewById(R.id.card_elixir)
     private val image: ImageView = itemView.findViewById(R.id.card_image)
     private val lvl: TextView = itemView.findViewById(R.id.card_lvl)
