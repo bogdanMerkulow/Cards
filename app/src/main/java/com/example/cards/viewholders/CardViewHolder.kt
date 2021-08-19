@@ -211,18 +211,18 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
             }
 
             setOnLongClickListener { false }
-        }
 
-        itemView.setOnTouchListener { _, event ->
-            when (event!!.action) {
-                MotionEvent.ACTION_DOWN -> itemView.startAnimation(dragScaleAnimation)
-                MotionEvent.ACTION_CANCEL -> itemView.startAnimation(cancelDragScaleAnimation)
-                MotionEvent.ACTION_UP -> itemView.startAnimation(cancelDragScaleAnimation)
+            setOnTouchListener { _, event ->
+                when (event!!.action) {
+                    MotionEvent.ACTION_DOWN -> itemView.startAnimation(dragScaleAnimation)
+                    MotionEvent.ACTION_CANCEL -> itemView.startAnimation(cancelDragScaleAnimation)
+                    MotionEvent.ACTION_UP -> itemView.startAnimation(cancelDragScaleAnimation)
+                }
+
+                true
             }
 
-            true
+            startAnimation(setCardOnStartPosAnimation)
         }
-
-        itemView.startAnimation(setCardOnStartPosAnimation)
     }
 }
