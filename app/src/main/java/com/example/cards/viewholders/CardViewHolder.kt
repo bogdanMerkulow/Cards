@@ -22,8 +22,10 @@ private const val SECOND_ITEM_POS_MULTIPLIER = 2f
 private const val THIRD_ITEM_POS_MULTIPLIER = 3f
 private const val PIVOT_SIZE = 0.5f
 private const val CARD_BACKGROUND_SIZE = -1f
+private const val DRAG_SIZE = 1.1f
 private const val MINIMUM_SIZE = 0f
 private const val DEFAULT_POS_AND_SIZE = 1f
+private const val DRAG_DURATION = 100L
 private const val ANIMATION_DURATION = 1000L
 private const val BEYOND_SCREEN = 1200f
 private const val START_POS_X = -210f
@@ -48,7 +50,7 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
             4 -> Position(DEFAULT_POS_AND_SIZE - adapterPosition, START_POS_Y - adapterPosition)
             5 -> Position(START_POS_X - adapterPosition, START_POS_Y - adapterPosition)
             6 -> Position(START_POS_X * SECOND_ITEM_POS_MULTIPLIER - adapterPosition,START_POS_Y - adapterPosition)
-            7 -> Position(START_POS_X * THIRD_ITEM_POS_MULTIPLIER - adapterPosition,START_POS_Y - adapterPosition            )
+            7 -> Position(START_POS_X * THIRD_ITEM_POS_MULTIPLIER - adapterPosition,START_POS_Y - adapterPosition)
             else -> throw IndexOutOfBoundsException("card position: $adapterPosition not found")
         }
 
@@ -120,8 +122,8 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
         }
 
         val dragScaleAnimation = ScaleAnimation(
-            DEFAULT_POS_AND_SIZE, 1.1f,
-            DEFAULT_POS_AND_SIZE, 1.1f,
+            DEFAULT_POS_AND_SIZE, DRAG_SIZE,
+            DEFAULT_POS_AND_SIZE, DRAG_SIZE,
             Animation.RELATIVE_TO_SELF,
             PIVOT_SIZE,
             Animation.RELATIVE_TO_SELF,
@@ -132,14 +134,14 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
         }
 
         val cancelDragScaleAnimation = ScaleAnimation(
-            1.1f, DEFAULT_POS_AND_SIZE,
-            1.1f, DEFAULT_POS_AND_SIZE,
+            DRAG_SIZE, DEFAULT_POS_AND_SIZE,
+            DRAG_SIZE, DEFAULT_POS_AND_SIZE,
             Animation.RELATIVE_TO_SELF,
             PIVOT_SIZE,
             Animation.RELATIVE_TO_SELF,
             PIVOT_SIZE
         ).apply {
-            duration = 100
+            duration = DRAG_DURATION
             fillAfter = true
         }
 
