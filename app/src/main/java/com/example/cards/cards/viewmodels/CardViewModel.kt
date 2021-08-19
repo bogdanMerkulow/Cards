@@ -2,6 +2,7 @@ package com.example.cards.cards.viewmodels
 
 import android.content.Context
 import android.graphics.Color
+import android.view.View
 import androidx.lifecycle.*
 import com.example.cards.R
 import com.example.cards.models.Average
@@ -25,7 +26,7 @@ private const val MAX_LVL_RARE: Int = 11
 
 class CardViewModel(private val context: Context) : ViewModel() {
     private val _data: MutableLiveData<List<GameCard>> = MutableLiveData<List<GameCard>>()
-    private val _loadedComplete: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    private val _loadedComplete: MutableLiveData<Int> = MutableLiveData<Int>()
     private val _averageCost: MutableLiveData<Average> = MutableLiveData<Average>()
     private val _readyToNewData: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     private val _newCard: MutableLiveData<NewCard> = MutableLiveData<NewCard>()
@@ -34,7 +35,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
     val data: LiveData<List<GameCard>>
         get() = _data
 
-    val loadedComplete: LiveData<Boolean>
+    val loadedComplete: LiveData<Int>
         get() = _loadedComplete
 
     val averageCost: LiveData<Average>
@@ -49,6 +50,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
     fun getNewShuffledData() {
         viewModelScope.launch(Dispatchers.IO) {
             currentCardsSet.clear()
+            _loadedComplete.postValue(View.INVISIBLE)
             _readyToNewData.postValue(false)
 
             val iconsList = getRandomNumbersList(CARDS_COUNT, ICONS_COUNT).map { context.resources.getIdentifier(
@@ -70,13 +72,11 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
             currentCardsSet.addAll(cards)
             _data.postValue(cards)
-            _loadedComplete.postValue(true)
 
-            viewModelScope.launch(Dispatchers.IO) {
-                Thread.sleep(TIME_TO_END_ANIMATION)
-                _averageCost.postValue(average)
-                _readyToNewData.postValue(true)
-            }
+            Thread.sleep(TIME_TO_END_ANIMATION)
+            _averageCost.postValue(average)
+            _readyToNewData.postValue(true)
+            _loadedComplete.postValue(View.VISIBLE)
         }
     }
 
@@ -97,7 +97,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
     fun getRandomUniqueCard(position: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            _loadedComplete.postValue(false)
+            _loadedComplete.postValue(View.INVISIBLE)
             _readyToNewData.postValue(false)
 
             val randomIcon = getRandomNumbersList(1, ICONS_COUNT)[0]
@@ -120,17 +120,17 @@ class CardViewModel(private val context: Context) : ViewModel() {
             currentCardsSet.removeAt(position)
             currentCardsSet.add(position, newCard)
 
-            Thread.sleep(TIME_TO_DROP_CARD)
-
             val average = getAverage(currentCardsSet)
 
-            viewModelScope.launch(Dispatchers.IO) {
-                Thread.sleep(TIME_TO_DROP_CARD)
-                _averageCost.postValue(average)
-                _readyToNewData.postValue(true)
-            }
+            Thread.sleep(TIME_TO_DROP_CARD)
 
+            _averageCost.postValue(average)
             _newCard.postValue(newCard)
+
+            Thread.sleep(TIME_TO_END_ANIMATION)
+
+            _readyToNewData.postValue(true)
+            _loadedComplete.postValue(View.VISIBLE)
         }
     }
 

@@ -63,8 +63,8 @@ class CardsFragment : Fragment() {
 
             averageCost.observe(viewLifecycleOwner, ::setAverage)
 
-            loadedComplete.observe(viewLifecycleOwner) {
-                binding.costLine.visibility = View.INVISIBLE
+            loadedComplete.observe(viewLifecycleOwner) { visibility ->
+                binding.costLine.visibility = visibility
             }
 
             readyToNewData.observe(viewLifecycleOwner) { ready ->
@@ -87,8 +87,6 @@ class CardsFragment : Fragment() {
     }
 
     private fun setAverage(average: Average) {
-        binding.costLine.visibility = View.VISIBLE
-
         binding.averageCost.text = average.cost.toString()
         binding.averageCost.setTextColor(average.rareColor)
         binding.averageCostTitle.setTextColor(average.rareColor)
