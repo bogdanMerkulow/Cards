@@ -139,13 +139,11 @@ class CardViewModel(private val context: Context) : ViewModel() {
     }
 
     private fun getAverage(cards: List<Card>): Average {
-        val average = Average(0, 0, 0)
-        average.cost = cards.map { it.lvl }.sum()
-        average.cost = ceil((average.cost.toDouble() / CARDS_COUNT + 1)).toInt()
-        average.elixir = getRare(average.cost)
-        average.rareColor = getRareColor(average.cost)
+        val cost = ceil((cards.map { it.lvl }.sum().toDouble() / CARDS_COUNT + 1)).toInt()
+        val rare = getRare(cost)
+        val rareColor = getRareColor(cost)
 
-        return average
+        return Average(cost, rare, rareColor)
     }
 
     private fun getRare(value: Int): Int {
