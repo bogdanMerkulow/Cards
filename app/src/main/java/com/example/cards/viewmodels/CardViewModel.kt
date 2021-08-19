@@ -65,8 +65,6 @@ class CardViewModel(private val context: Context) : ViewModel() {
                 iconsList.add(iconId)
             }
 
-            iconsList = iconsList.shuffled() as MutableList<Int>
-
             iconsList.forEach { icon ->
                 val cardLvl = Random.nextInt(MIN_LVL_RARE, MAX_LVL_RARE)
 
@@ -79,10 +77,8 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
             Thread.sleep(START_DELAY)
 
-            val shuffledCards = cards.shuffled()
-
-            currentCardsSet.addAll(shuffledCards)
-            _data.postValue(shuffledCards)
+            currentCardsSet.addAll(cards)
+            _data.postValue(cards)
             _loadedComplete.postValue(true)
 
             viewModelScope.launch(Dispatchers.IO) {
