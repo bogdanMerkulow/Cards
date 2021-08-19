@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.cards.R
 import com.example.cards.adapters.ViewHolder
+import com.example.cards.databinding.CardItemBinding
 import com.example.cards.models.Card
 import com.example.cards.models.Position
 import kotlinx.coroutines.*
@@ -35,9 +36,8 @@ private fun createView(parent: ViewGroup): View = LayoutInflater.from(parent.con
 
 class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
     ViewHolder<Card>(createView(parent)) {
-    private val elixir: ImageView = itemView.findViewById(R.id.card_elixir)
-    private val image: ImageView = itemView.findViewById(R.id.card_image)
-    private val lvl: TextView = itemView.findViewById(R.id.card_lvl)
+
+    private val binding: CardItemBinding = CardItemBinding.bind(parent)
 
     override fun bind(data: Card) {
         val multiplier = (adapterPosition + 1) * MAGIC_MULTIPLIER
@@ -160,17 +160,17 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
                     withContext(Dispatchers.IO) {
                         Thread.sleep(ANIMATION_DURATION / IMAGE_FADE_MULTIPLIER)
                         withContext(Dispatchers.Main) {
-                            image.setImageResource(data.image)
+                            binding.cardImage.setImageResource(data.image)
                         }
                     }
                 }
             }
 
             override fun onAnimationEnd(animation: Animation?) {
-                elixir.visibility = View.VISIBLE
-                lvl.visibility = View.VISIBLE
-                elixir.startAnimation(elixirFadeAnimation)
-                lvl.startAnimation(elixirFadeAnimation)
+                binding.cardElixir.visibility = View.VISIBLE
+                binding.cardLvl.visibility = View.VISIBLE
+                binding.cardElixir.startAnimation(elixirFadeAnimation)
+                binding.cardLvl.startAnimation(elixirFadeAnimation)
             }
 
             override fun onAnimationRepeat(animation: Animation?) {}
@@ -182,9 +182,9 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
                     withContext(Dispatchers.IO) {
                         Thread.sleep(ANIMATION_DURATION / IMAGE_FADE_MULTIPLIER)
                         withContext(Dispatchers.Main) {
-                            lvl.text = null
-                            elixir.setImageResource(0)
-                            image.setImageResource(R.drawable.card_back)
+                            binding.cardLvl.text = null
+                            binding.cardElixir.setImageResource(0)
+                            binding.cardImage.setImageResource(R.drawable.card_back)
                         }
                     }
                 }
@@ -198,11 +198,11 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
         })
 
         itemView.apply {
-            lvl.text = data.lvl.toString()
-            elixir.setImageResource(data.rare)
-            elixir.visibility = View.INVISIBLE
-            lvl.visibility = View.INVISIBLE
-            image.setImageResource(R.drawable.card_back)
+            binding.cardLvl.text = data.lvl.toString()
+            binding.cardElixir.setImageResource(data.rare)
+            binding.cardElixir.visibility = View.INVISIBLE
+            binding.cardLvl.visibility = View.INVISIBLE
+            binding.cardImage.setImageResource(R.drawable.card_back)
 
             setOnClickListener {
                 listener(adapterPosition)
