@@ -9,10 +9,10 @@ class RecyclerViewAdapter<T>(
     private val viewHolderFactory: ViewHolderFactory<T>,
 ) : RecyclerView.Adapter<ViewHolder<T>>(), ItemTouchHelperAdapter {
 
-    private var items: MutableList<T> = mutableListOf()
+    private val items: MutableList<T> = mutableListOf()
 
     fun addItems(items: List<T>) {
-        this.items = items as MutableList<T>
+        this.items.addAll(items as MutableList<T>)
         notifyDataSetChanged()
     }
 
