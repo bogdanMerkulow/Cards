@@ -5,5 +5,5 @@ import dagger.Component
 
 @Component(modules = [ViewModelModule::class])
 interface DaggerComponent {
-    fun getViewModel(): ViewModel
+    fun getViewModelsMap(): Map<Class<*>, ViewModel>
 }

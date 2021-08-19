@@ -6,6 +6,6 @@ import com.example.cards.App
 
 class ViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return App.daggerComponent.getViewModel() as T
+        return App.daggerComponent.getViewModelsMap()[modelClass] as T
     }
 }
