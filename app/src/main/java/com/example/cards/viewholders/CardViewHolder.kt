@@ -1,7 +1,5 @@
 package com.example.cards.viewholders
 
-import android.R.attr.x
-import android.R.attr.y
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -16,7 +14,6 @@ import com.example.cards.adapters.ViewHolder
 import com.example.cards.models.Card
 import com.example.cards.models.Position
 import kotlinx.coroutines.*
-
 
 private const val MAGIC_MULTIPLIER = 1.2f
 private const val IMAGE_FADE_MULTIPLIER = 2
@@ -35,7 +32,8 @@ private const val START_POS_Y = -225f
 private fun getView(parent: ViewGroup): View = LayoutInflater.from(parent.context)
     .inflate(R.layout.card_item, parent, false)
 
-class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) : ViewHolder<Card>(getView(parent)) {
+class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
+    ViewHolder<Card>(getView(parent)) {
     private val elixir: ImageView = itemView.findViewById(R.id.card_elixir)
     private val image: ImageView = itemView.findViewById(R.id.card_image)
     private val lvl: TextView = itemView.findViewById(R.id.card_lvl)
@@ -43,14 +41,14 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) : V
     override fun bind(data: Card) {
         val multiplier = (adapterPosition + 1) * MAGIC_MULTIPLIER
         val positionFrom = when (adapterPosition) {
-            0 -> Position(DEFAULT_POS_AND_SIZE - adapterPosition, DEFAULT_POS_AND_SIZE - adapterPosition)
+            0 -> Position(DEFAULT_POS_AND_SIZE - adapterPosition,DEFAULT_POS_AND_SIZE - adapterPosition)
             1 -> Position(START_POS_X - adapterPosition, DEFAULT_POS_AND_SIZE - adapterPosition)
-            2 -> Position(START_POS_X * SECOND_ITEM_POS_MULTIPLIER - adapterPosition, DEFAULT_POS_AND_SIZE - adapterPosition)
-            3 -> Position(START_POS_X * THIRD_ITEM_POS_MULTIPLIER - adapterPosition, DEFAULT_POS_AND_SIZE - adapterPosition)
+            2 -> Position(START_POS_X * SECOND_ITEM_POS_MULTIPLIER - adapterPosition,DEFAULT_POS_AND_SIZE - adapterPosition)
+            3 -> Position(START_POS_X * THIRD_ITEM_POS_MULTIPLIER - adapterPosition,DEFAULT_POS_AND_SIZE - adapterPosition)
             4 -> Position(DEFAULT_POS_AND_SIZE - adapterPosition, START_POS_Y - adapterPosition)
             5 -> Position(START_POS_X - adapterPosition, START_POS_Y - adapterPosition)
-            6 -> Position(START_POS_X * SECOND_ITEM_POS_MULTIPLIER - adapterPosition, START_POS_Y - adapterPosition)
-            7 -> Position(START_POS_X * THIRD_ITEM_POS_MULTIPLIER - adapterPosition, START_POS_Y - adapterPosition)
+            6 -> Position(START_POS_X * SECOND_ITEM_POS_MULTIPLIER - adapterPosition,START_POS_Y - adapterPosition)
+            7 -> Position(START_POS_X * THIRD_ITEM_POS_MULTIPLIER - adapterPosition,START_POS_Y - adapterPosition            )
             else -> throw IndexOutOfBoundsException("card position: $adapterPosition not found")
         }
 
@@ -153,7 +151,6 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) : V
             }
 
             override fun onAnimationRepeat(animation: Animation?) {}
-
         })
 
         flipCardToFrontAnimation.setAnimationListener(object : Animation.AnimationListener {
@@ -176,7 +173,6 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) : V
             }
 
             override fun onAnimationRepeat(animation: Animation?) {}
-
         })
 
         flipCardToBackAnimation.setAnimationListener(object : Animation.AnimationListener {
@@ -198,7 +194,6 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) : V
             }
 
             override fun onAnimationRepeat(animation: Animation?) {}
-
         })
 
         itemView.apply {
