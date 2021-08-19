@@ -95,23 +95,25 @@ class CardViewModel(private val context: Context) : ViewModel() {
         return numberList.shuffled()
     }
 
+    private tailrec fun randomCard(): Int {
+        val randomIcon = getRandomNumbersList(1, ICONS_COUNT)[0]
+
+        val iconId = context.resources.getIdentifier(
+            "$ICON_PREFIX$randomIcon",
+            DEF_TYPE,
+            context.packageName
+        )
+
+        return if (currentCardsSet.any { it.image == iconId }) randomCard()
+        else iconId
+    }
+
     fun getRandomUniqueCard(position: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             _loadedComplete.postValue(View.INVISIBLE)
             _readyToNewData.postValue(false)
 
-            val randomIcon = getRandomNumbersList(1, ICONS_COUNT)[0]
-
-            val iconId = context.resources.getIdentifier(
-                "$ICON_PREFIX$randomIcon",
-                DEF_TYPE,
-                context.packageName
-            )
-
-            if (currentCardsSet.map { it.image == iconId }.contains(true)) {
-                getRandomUniqueCard(position)
-                return@launch
-            }
+            val iconId = randomCard()
 
             val cardLvl = Random.nextInt(MIN_LVL_RARE, MAX_LVL_RARE)
             val elixir = getRare(cardLvl)
