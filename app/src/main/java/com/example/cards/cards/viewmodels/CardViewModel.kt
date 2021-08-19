@@ -48,28 +48,20 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
     fun getNewShuffledData() {
         viewModelScope.launch(Dispatchers.IO) {
-            val cards = mutableListOf<GameCard>()
-            var iconsList = mutableListOf<Int>()
-
             currentCardsSet.clear()
             _readyToNewData.postValue(false)
 
-            getRandomNumbersList(CARDS_COUNT, ICONS_COUNT).forEach { randomNumber ->
-                val iconId = context.resources.getIdentifier(
-                    "$ICON_PREFIX$randomNumber",
-                    DEF_TYPE,
-                    context.packageName
-                )
+            val iconsList = getRandomNumbersList(CARDS_COUNT, ICONS_COUNT).map { context.resources.getIdentifier(
+                "$ICON_PREFIX$it",
+                DEF_TYPE,
+                context.packageName
+            ) }
 
-                iconsList.add(iconId)
-            }
-
-            iconsList.forEach { icon ->
+            val cards = iconsList.map { icon ->
                 val cardLvl = Random.nextInt(MIN_LVL_RARE, MAX_LVL_RARE)
-
                 val elixir = getRare(cardLvl)
 
-                cards.add(GameCard(elixir, cardLvl, icon))
+                GameCard(elixir, cardLvl, icon)
             }
 
             val average = getAverage(cards)
