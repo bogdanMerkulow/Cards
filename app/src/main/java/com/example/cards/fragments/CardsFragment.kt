@@ -60,24 +60,26 @@ class CardsFragment : Fragment() {
 
         binding.cardList.adapter = adapter
 
-        viewModel.data.observe(viewLifecycleOwner) { data ->
-            adapter.addItems(data)
-        }
+        with(viewModel) {
+            data.observe(viewLifecycleOwner) { data ->
+                adapter.addItems(data)
+            }
 
-        viewModel.loadedComplete.observe(viewLifecycleOwner) {
-            binding.costLine.visibility = View.INVISIBLE
-        }
+            loadedComplete.observe(viewLifecycleOwner) {
+                binding.costLine.visibility = View.INVISIBLE
+            }
 
-        viewModel.averageCost.observe(viewLifecycleOwner) { average ->
-            setAverage(average)
-        }
+            averageCost.observe(viewLifecycleOwner) { average ->
+                setAverage(average)
+            }
 
-        viewModel.readyToNewData.observe(viewLifecycleOwner) { ready ->
-            binding.randomButton.isEnabled = ready
-        }
+            readyToNewData.observe(viewLifecycleOwner) { ready ->
+                binding.randomButton.isEnabled = ready
+            }
 
-        viewModel.newCard.observe(viewLifecycleOwner) { card ->
-            adapter.replaceItem(card, card.position)
+            newCard.observe(viewLifecycleOwner) { card ->
+                adapter.replaceItem(card, card.position)
+            }
         }
     }
 
