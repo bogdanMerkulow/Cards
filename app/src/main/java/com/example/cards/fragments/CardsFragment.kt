@@ -33,6 +33,12 @@ class CardsFragment : Fragment() {
         viewModel = ViewModelProvider(this, ViewModelFactory()).get(CardViewModel::class.java)
         _binding = CardsFragmentBinding.inflate(layoutInflater)
     }
+    
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = binding.root
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -91,11 +97,6 @@ class CardsFragment : Fragment() {
         binding.averageCostTitle.setTextColor(average.rareColor)
         binding.averageElixir.setImageResource(average.elixir)
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = binding.root
 
     override fun onDestroyView() {
         super.onDestroyView()
