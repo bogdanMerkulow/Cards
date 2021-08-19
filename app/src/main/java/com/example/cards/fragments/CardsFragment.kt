@@ -61,18 +61,14 @@ class CardsFragment : Fragment() {
         binding.cardList.adapter = adapter
 
         with(viewModel) {
-            data.observe(viewLifecycleOwner) { data ->
-                adapter.addItems(data)
-            }
+            data.observe(viewLifecycleOwner, adapter::addItems)
+
+            averageCost.observe(viewLifecycleOwner, ::setAverage)
 
             loadedComplete.observe(viewLifecycleOwner) {
                 binding.costLine.visibility = View.INVISIBLE
             }
-
-            averageCost.observe(viewLifecycleOwner) { average ->
-                setAverage(average)
-            }
-
+            
             readyToNewData.observe(viewLifecycleOwner) { ready ->
                 binding.randomButton.isEnabled = ready
             }
