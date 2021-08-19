@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -19,21 +20,21 @@ import com.example.cards.factories.ViewModelFactory
 import com.example.cards.models.Average
 import com.example.cards.models.Card
 import com.example.cards.viewmodels.CardViewModel
+import kotlin.properties.ReadWriteProperty
 
 private const val SPAN_COUNT = 4
 
 class CardsFragment : Fragment() {
-    private lateinit var viewModel: CardViewModel
+    private val viewModel: CardViewModel by viewModels(factoryProducer = { ViewModelFactory() })
     private lateinit var adapter: RecyclerViewAdapter<Card>
     private var _binding: CardsFragmentBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this, ViewModelFactory()).get(CardViewModel::class.java)
         _binding = CardsFragmentBinding.inflate(layoutInflater)
     }
-    
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
