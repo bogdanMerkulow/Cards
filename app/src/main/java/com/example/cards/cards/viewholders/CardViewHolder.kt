@@ -6,8 +6,6 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import android.view.animation.TranslateAnimation
-import android.widget.ImageView
-import android.widget.TextView
 import com.example.cards.R
 import com.example.cards.adapters.ViewHolder
 import com.example.cards.databinding.CardItemBinding
@@ -118,30 +116,6 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
             DEFAULT_POS_AND_SIZE, BEYOND_SCREEN
         ).apply {
             duration = ANIMATION_DURATION * 2
-        }
-
-        val dragScaleAnimation = ScaleAnimation(
-            DEFAULT_POS_AND_SIZE, DRAG_SIZE,
-            DEFAULT_POS_AND_SIZE, DRAG_SIZE,
-            Animation.RELATIVE_TO_SELF,
-            PIVOT_SIZE,
-            Animation.RELATIVE_TO_SELF,
-            PIVOT_SIZE
-        ).apply {
-            duration = ANIMATION_DURATION / ELIXIR_FADE_MULTIPLIER
-            fillAfter = true
-        }
-
-        val cancelDragScaleAnimation = ScaleAnimation(
-            DRAG_SIZE, DEFAULT_POS_AND_SIZE,
-            DRAG_SIZE, DEFAULT_POS_AND_SIZE,
-            Animation.RELATIVE_TO_SELF,
-            PIVOT_SIZE,
-            Animation.RELATIVE_TO_SELF,
-            PIVOT_SIZE
-        ).apply {
-            duration = DRAG_DURATION
-            fillAfter = true
         }
 
         placeCardToEndPos.setAnimationListener(object : Animation.AnimationListener {
