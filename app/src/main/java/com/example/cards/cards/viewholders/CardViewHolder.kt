@@ -20,10 +20,8 @@ private const val SECOND_ITEM_POS_MULTIPLIER = 2f
 private const val THIRD_ITEM_POS_MULTIPLIER = 3f
 private const val PIVOT_SIZE = 0.5f
 private const val CARD_BACKGROUND_SIZE = -1f
-private const val DRAG_SIZE = 1.1f
 private const val MINIMUM_SIZE = 0f
 private const val DEFAULT_POS_AND_SIZE = 1f
-private const val DRAG_DURATION = 100L
 private const val ANIMATION_DURATION = 1000L
 private const val BEYOND_SCREEN = 1200f
 private const val START_POS_X = -210f
@@ -39,31 +37,42 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
 
     override fun bind(data: Card) {
         val multiplier = (adapterPosition + 1) * MAGIC_MULTIPLIER
-        val positionFrom = when (adapterPosition) {
-            0 -> Position(DEFAULT_POS_AND_SIZE - adapterPosition,DEFAULT_POS_AND_SIZE - adapterPosition)
-            1 -> Position(START_POS_X - adapterPosition, DEFAULT_POS_AND_SIZE - adapterPosition)
-            2 -> Position(START_POS_X * SECOND_ITEM_POS_MULTIPLIER - adapterPosition,DEFAULT_POS_AND_SIZE - adapterPosition)
-            3 -> Position(START_POS_X * THIRD_ITEM_POS_MULTIPLIER - adapterPosition,DEFAULT_POS_AND_SIZE - adapterPosition)
-            4 -> Position(DEFAULT_POS_AND_SIZE - adapterPosition, START_POS_Y - adapterPosition)
-            5 -> Position(START_POS_X - adapterPosition, START_POS_Y - adapterPosition)
-            6 -> Position(START_POS_X * SECOND_ITEM_POS_MULTIPLIER - adapterPosition,START_POS_Y - adapterPosition)
-            7 -> Position(START_POS_X * THIRD_ITEM_POS_MULTIPLIER - adapterPosition,START_POS_Y - adapterPosition)
-            else -> throw IndexOutOfBoundsException("card position: $adapterPosition not found")
-        }
+        val positionFrom = getPositionByAdapterPosition(adapterPosition)
 
-        val setCardOnStartPosAnimation = TranslateAnimation(
+        val setCardOnStartPosAnimation = getTranslateAnimation(
             positionFrom.x, positionFrom.x,
-            positionFrom.y, positionFrom.y
-        ).apply {
-            duration = ANIMATION_DURATION
-        }
+            positionFrom.y, positionFrom.y, ANIMATION_DURATION
+        )
 
-        val placeCardToEndPos = TranslateAnimation(
+        val placeCardToEndPos = getTranslateAnimation(
             positionFrom.x, DEFAULT_POS_AND_SIZE,
-            positionFrom.y, DEFAULT_POS_AND_SIZE
-        ).apply {
-            duration = ((adapterPosition * ANIMATION_DURATION) / multiplier).toLong()
-        }
+            positionFrom.y, DEFAULT_POS_AND_SIZE,
+            ((adapterPosition * ANIMATION_DURATION) / multiplier).toLong()
+        )
+
+        val flipCardToFrontAnimation = getScaleAnimation(
+            CARD_BACKGROUND_SIZE, DEFAULT_POS_AND_SIZE,
+            DEFAULT_POS_AND_SIZE, DEFAULT_POS_AND_SIZE,
+            ANIMATION_DURATION
+        )
+
+        val flipCardToBackAnimation = getScaleAnimation(
+            DEFAULT_POS_AND_SIZE, CARD_BACKGROUND_SIZE,
+            DEFAULT_POS_AND_SIZE, DEFAULT_POS_AND_SIZE,
+            ANIMATION_DURATION
+        )
+
+        val elixirFadeAnimation = getScaleAnimation(
+            MINIMUM_SIZE, DEFAULT_POS_AND_SIZE,
+            MINIMUM_SIZE, DEFAULT_POS_AND_SIZE,
+            ANIMATION_DURATION / ELIXIR_FADE_MULTIPLIER
+        )
+
+        val dropCardAnimation = getTranslateAnimation(
+            DEFAULT_POS_AND_SIZE, DEFAULT_POS_AND_SIZE,
+            DEFAULT_POS_AND_SIZE, BEYOND_SCREEN,
+            ANIMATION_DURATION * 2
+        )
 
         setCardOnStartPosAnimation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {}
@@ -74,49 +83,6 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
 
             override fun onAnimationRepeat(animation: Animation?) {}
         })
-
-        val flipCardToFrontAnimation = ScaleAnimation(
-            CARD_BACKGROUND_SIZE, DEFAULT_POS_AND_SIZE,
-            DEFAULT_POS_AND_SIZE, DEFAULT_POS_AND_SIZE,
-            Animation.RELATIVE_TO_SELF,
-            PIVOT_SIZE,
-            Animation.RELATIVE_TO_SELF,
-            PIVOT_SIZE
-        ).apply {
-            duration = ANIMATION_DURATION
-            fillAfter = true
-        }
-
-        val flipCardToBackAnimation = ScaleAnimation(
-            DEFAULT_POS_AND_SIZE, CARD_BACKGROUND_SIZE,
-            DEFAULT_POS_AND_SIZE, DEFAULT_POS_AND_SIZE,
-            Animation.RELATIVE_TO_SELF,
-            PIVOT_SIZE,
-            Animation.RELATIVE_TO_SELF,
-            PIVOT_SIZE
-        ).apply {
-            duration = ANIMATION_DURATION
-            fillAfter = true
-        }
-
-        val elixirFadeAnimation = ScaleAnimation(
-            MINIMUM_SIZE, DEFAULT_POS_AND_SIZE,
-            MINIMUM_SIZE, DEFAULT_POS_AND_SIZE,
-            Animation.RELATIVE_TO_SELF,
-            PIVOT_SIZE,
-            Animation.RELATIVE_TO_SELF,
-            PIVOT_SIZE
-        ).apply {
-            duration = ANIMATION_DURATION / ELIXIR_FADE_MULTIPLIER
-            fillAfter = true
-        }
-
-        val dropCardAnimation = TranslateAnimation(
-            DEFAULT_POS_AND_SIZE, DEFAULT_POS_AND_SIZE,
-            DEFAULT_POS_AND_SIZE, BEYOND_SCREEN
-        ).apply {
-            duration = ANIMATION_DURATION * 2
-        }
 
         placeCardToEndPos.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {}
@@ -186,6 +152,54 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
             setOnLongClickListener { false }
 
             startAnimation(setCardOnStartPosAnimation)
+        }
+    }
+
+    private fun getScaleAnimation(
+        fromX: Float,
+        toX: Float,
+        fromY: Float,
+        toY: Float,
+        duration: Long): ScaleAnimation {
+        return ScaleAnimation(
+            fromX, toX,
+            fromY, toY,
+            Animation.RELATIVE_TO_SELF,
+            PIVOT_SIZE,
+            Animation.RELATIVE_TO_SELF,
+            PIVOT_SIZE
+        ).apply {
+            this.duration = duration
+            fillAfter = true
+        }
+    }
+
+    private fun getTranslateAnimation(
+        fromX: Float,
+        toX: Float,
+        fromY: Float,
+        toY: Float,
+        duration: Long
+    ): TranslateAnimation {
+        return TranslateAnimation(
+            fromX, toX,
+            fromY, toY
+        ).apply {
+            this.duration = duration
+        }
+    }
+
+    private fun getPositionByAdapterPosition(adapterPosition: Int): Position {
+        return when (adapterPosition) {
+            0 -> Position(DEFAULT_POS_AND_SIZE - adapterPosition,DEFAULT_POS_AND_SIZE - adapterPosition)
+            1 -> Position(START_POS_X - adapterPosition, DEFAULT_POS_AND_SIZE - adapterPosition)
+            2 -> Position(START_POS_X * SECOND_ITEM_POS_MULTIPLIER - adapterPosition,DEFAULT_POS_AND_SIZE - adapterPosition)
+            3 -> Position(START_POS_X * THIRD_ITEM_POS_MULTIPLIER - adapterPosition,DEFAULT_POS_AND_SIZE - adapterPosition)
+            4 -> Position(DEFAULT_POS_AND_SIZE - adapterPosition, START_POS_Y - adapterPosition)
+            5 -> Position(START_POS_X - adapterPosition, START_POS_Y - adapterPosition)
+            6 -> Position(START_POS_X * SECOND_ITEM_POS_MULTIPLIER - adapterPosition,START_POS_Y - adapterPosition)
+            7 -> Position(START_POS_X * THIRD_ITEM_POS_MULTIPLIER - adapterPosition,START_POS_Y - adapterPosition)
+            else -> throw IndexOutOfBoundsException("card position: $adapterPosition not found")
         }
     }
 }
