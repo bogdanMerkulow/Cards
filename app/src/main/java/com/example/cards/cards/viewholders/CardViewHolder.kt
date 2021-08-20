@@ -19,7 +19,6 @@ private const val IMAGE_FADE_MULTIPLIER = 2
 private const val ELIXIR_FADE_MULTIPLIER = 3
 private const val SECOND_ITEM_POS_MULTIPLIER = 2f
 private const val THIRD_ITEM_POS_MULTIPLIER = 3f
-private const val PIVOT_SIZE = 0.5f
 private const val CARD_BACKGROUND_SIZE = -1f
 private const val MINIMUM_SIZE = 0f
 private const val DEFAULT_POS_AND_SIZE = 1f
@@ -40,37 +39,37 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
         val multiplier = (adapterPosition + 1) * MAGIC_MULTIPLIER
         val positionFrom = getPositionByAdapterPosition(adapterPosition)
 
-        val setCardOnStartPosAnimation = getTranslateAnimation(
+        val setCardOnStartPosAnimation = AnimationHelper.getTranslateAnimation(
             positionFrom.x, positionFrom.x,
             positionFrom.y, positionFrom.y,
             ANIMATION_DURATION
         )
 
-        val placeCardToEndPos = getTranslateAnimation(
+        val placeCardToEndPos = AnimationHelper.getTranslateAnimation(
             positionFrom.x, DEFAULT_POS_AND_SIZE,
             positionFrom.y, DEFAULT_POS_AND_SIZE,
             ((adapterPosition * ANIMATION_DURATION) / multiplier).toLong()
         )
 
-        val flipCardToFrontAnimation = getScaleAnimation(
+        val flipCardToFrontAnimation = AnimationHelper.getScaleAnimation(
             CARD_BACKGROUND_SIZE, DEFAULT_POS_AND_SIZE,
             DEFAULT_POS_AND_SIZE, DEFAULT_POS_AND_SIZE,
             ANIMATION_DURATION
         )
 
-        val flipCardToBackAnimation = getScaleAnimation(
+        val flipCardToBackAnimation = AnimationHelper.getScaleAnimation(
             DEFAULT_POS_AND_SIZE, CARD_BACKGROUND_SIZE,
             DEFAULT_POS_AND_SIZE, DEFAULT_POS_AND_SIZE,
             ANIMATION_DURATION
         )
 
-        val elixirFadeAnimation = getScaleAnimation(
+        val elixirFadeAnimation = AnimationHelper.getScaleAnimation(
             MINIMUM_SIZE, DEFAULT_POS_AND_SIZE,
             MINIMUM_SIZE, DEFAULT_POS_AND_SIZE,
             ANIMATION_DURATION / ELIXIR_FADE_MULTIPLIER
         )
 
-        val dropCardAnimation = getTranslateAnimation(
+        val dropCardAnimation = AnimationHelper.getTranslateAnimation(
             DEFAULT_POS_AND_SIZE, DEFAULT_POS_AND_SIZE,
             DEFAULT_POS_AND_SIZE, BEYOND_SCREEN,
             ANIMATION_DURATION * 2
@@ -140,41 +139,6 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
             setOnLongClickListener { false }
 
             startAnimation(setCardOnStartPosAnimation)
-        }
-    }
-
-    private fun getScaleAnimation(
-        fromX: Float,
-        toX: Float,
-        fromY: Float,
-        toY: Float,
-        duration: Long
-    ): ScaleAnimation {
-        return ScaleAnimation(
-            fromX, toX,
-            fromY, toY,
-            Animation.RELATIVE_TO_SELF,
-            PIVOT_SIZE,
-            Animation.RELATIVE_TO_SELF,
-            PIVOT_SIZE
-        ).apply {
-            this.duration = duration
-            fillAfter = true
-        }
-    }
-
-    private fun getTranslateAnimation(
-        fromX: Float,
-        toX: Float,
-        fromY: Float,
-        toY: Float,
-        duration: Long
-    ): TranslateAnimation {
-        return TranslateAnimation(
-            fromX, toX,
-            fromY, toY
-        ).apply {
-            this.duration = duration
         }
     }
 
