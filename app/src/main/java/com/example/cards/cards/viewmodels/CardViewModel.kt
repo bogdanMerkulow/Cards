@@ -2,6 +2,7 @@ package com.example.cards.cards.viewmodels
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -100,7 +101,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
     }
 
     private tailrec fun randomCard(): Int {
-        val randomIcon = Random.nextInt(1, CARDS_COUNT)
+        val randomIcon = Random.nextInt(1, ICONS_COUNT)
 
         val iconId = context.resources.getIdentifier(
             "$ICON_PREFIX$randomIcon",
@@ -141,7 +142,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
     }
 
     private fun getAverage(cards: List<Card>): Average {
-        val cost = ceil((cards.map { it.lvl }.sum().toDouble() / CARDS_COUNT + 1)).toInt()
+        val cost = ceil((cards.map { it.lvl }.average())).toInt()
         val rare = getRare(cost)
         val rareColor = getRareColor(cost)
 
