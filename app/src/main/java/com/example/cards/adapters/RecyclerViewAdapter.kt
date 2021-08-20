@@ -20,6 +20,7 @@ class RecyclerViewAdapter<T>(
 
     fun replaceItem(item: T, pos: Int) {
         items.removeAt(pos)
+        holderList.removeAt(pos)
         items.add(pos, item)
 
         notifyItemChanged(pos)
@@ -31,7 +32,7 @@ class RecyclerViewAdapter<T>(
 
     override fun onBindViewHolder(holder: ViewHolder<T>, position: Int) {
         holder.bind(items[position])
-        holderList.add(holder)
+        holderList.add(position, holder)
     }
 
     override fun getItemCount(): Int {

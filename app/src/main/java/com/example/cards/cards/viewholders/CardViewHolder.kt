@@ -111,6 +111,7 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
                     cardElixir.startAnimation(elixirFadeAnimation)
                     cardLvl.startAnimation(elixirFadeAnimation)
                 }
+                itemView.clearAnimation()
             }
         )
 
