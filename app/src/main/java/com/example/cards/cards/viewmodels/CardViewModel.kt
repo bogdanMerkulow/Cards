@@ -15,6 +15,8 @@ import com.example.cards.models.NewCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.round
 import kotlin.random.Random
 
 private const val START_DELAY = 1200L
@@ -142,7 +144,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
     }
 
     private fun getAverage(cards: List<Card>): Average {
-        val cost = ceil((cards.map { it.lvl }.average())).toInt()
+        val cost = round((cards.map { it.lvl }.average())).toInt()
         val rare = getRare(cost)
         val rareColor = getRareColor(cost)
 
