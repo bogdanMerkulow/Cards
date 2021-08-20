@@ -37,23 +37,23 @@ class CardsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = binding.root
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.cardList.layoutManager = GridLayoutManager(context, SPAN_COUNT)
-
-        binding.randomButton.setOnClickListener {
-            onRandomButtonClick()
+        with(binding) {
+            cardList.layoutManager = GridLayoutManager(context, SPAN_COUNT)
+            randomButton.setOnClickListener {
+                onRandomButtonClick()
+            }
         }
 
         adapter = RecyclerViewAdapter(
             CardViewHolderFactory(this::onCardClick),
         )
 
+        binding.cardList.adapter = adapter
+
         val touchHelper = ItemTouchHelper(SimpleItemTouchHelperCallback(adapter))
         touchHelper.attachToRecyclerView(binding.cardList)
-
-        binding.cardList.adapter = adapter
 
         with(viewModel) {
             data.observe(viewLifecycleOwner, adapter::addItems)
@@ -93,10 +93,12 @@ class CardsFragment : Fragment() {
     }
 
     private fun setAverage(average: Average) {
-        binding.averageCost.text = average.cost.toString()
-        binding.averageCost.setTextColor(average.rareColor)
-        binding.averageCostTitle.setTextColor(average.rareColor)
-        binding.averageElixir.setImageResource(average.elixir)
+        with(binding) {
+            averageCost.text = average.cost.toString()
+            averageCost.setTextColor(average.rareColor)
+            averageCostTitle.setTextColor(average.rareColor)
+            averageElixir.setImageResource(average.elixir)
+        }
     }
 
     override fun onDestroyView() {

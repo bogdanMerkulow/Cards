@@ -105,10 +105,12 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
                 }
             },
             onEnd = {
-                binding.cardElixir.visibility = View.VISIBLE
-                binding.cardLvl.visibility = View.VISIBLE
-                binding.cardElixir.startAnimation(elixirFadeAnimation)
-                binding.cardLvl.startAnimation(elixirFadeAnimation)
+                with(binding) {
+                    cardElixir.visibility = View.VISIBLE
+                    cardLvl.visibility = View.VISIBLE
+                    cardElixir.startAnimation(elixirFadeAnimation)
+                    cardLvl.startAnimation(elixirFadeAnimation)
+                }
             }
         )
 
@@ -118,9 +120,11 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
                     withContext(Dispatchers.IO) {
                         Thread.sleep(ANIMATION_DURATION / IMAGE_FADE_MULTIPLIER)
                         withContext(Dispatchers.Main) {
-                            binding.cardLvl.text = null
-                            binding.cardElixir.setImageResource(0)
-                            binding.cardImage.setImageResource(R.drawable.card_back)
+                            with(binding) {
+                                cardLvl.text = null
+                                cardElixir.setImageResource(0)
+                                cardImage.setImageResource(R.drawable.card_back)
+                            }
                         }
                     }
                 }
@@ -130,13 +134,15 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
             }
         )
 
-        itemView.apply {
-            binding.cardLvl.text = data.lvl.toString()
-            binding.cardElixir.setImageResource(data.rare)
-            binding.cardElixir.visibility = View.INVISIBLE
-            binding.cardLvl.visibility = View.INVISIBLE
-            binding.cardImage.setImageResource(R.drawable.card_back)
+        with(binding) {
+            cardLvl.text = data.lvl.toString()
+            cardElixir.setImageResource(data.rare)
+            cardElixir.visibility = View.INVISIBLE
+            cardLvl.visibility = View.INVISIBLE
+            cardImage.setImageResource(R.drawable.card_back)
+        }
 
+        with(itemView) {
             setOnClickListener {
                 listener(adapterPosition)
                 itemView.startAnimation(flipCardToBackAnimation)

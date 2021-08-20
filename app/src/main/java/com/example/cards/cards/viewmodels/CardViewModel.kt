@@ -126,8 +126,10 @@ class CardViewModel(private val context: Context) : ViewModel() {
             val elixir = getRare(cardLvl)
             val newCard = NewCard(Card(elixir, cardLvl, iconId), position)
 
-            currentCardsSet.removeAt(position)
-            currentCardsSet.add(position, newCard.card)
+            with(currentCardsSet) {
+                removeAt(position)
+                add(position, newCard.card)
+            }
 
             val average = getAverage(currentCardsSet)
 
