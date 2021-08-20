@@ -13,6 +13,7 @@ class RecyclerViewAdapter<T>(
     private val items: MutableList<T> = mutableListOf()
 
     fun addItems(items: List<T>) {
+        this.items.clear()
         this.items.addAll(items as MutableList<T>)
         notifyDataSetChanged()
     }

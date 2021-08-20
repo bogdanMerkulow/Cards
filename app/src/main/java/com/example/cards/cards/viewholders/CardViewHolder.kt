@@ -9,6 +9,7 @@ import android.view.animation.TranslateAnimation
 import com.example.cards.R
 import com.example.cards.adapters.ViewHolder
 import com.example.cards.databinding.CardItemBinding
+import com.example.cards.extections.setListener
 import com.example.cards.models.Card
 import com.example.cards.models.Position
 import kotlinx.coroutines.*
@@ -74,28 +75,20 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
             ANIMATION_DURATION * 2
         )
 
-        setCardOnStartPosAnimation.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {}
-
-            override fun onAnimationEnd(animation: Animation?) {
+        setCardOnStartPosAnimation.setListener(
+            onEnd = {
                 itemView.startAnimation(placeCardToEndPos)
             }
+        )
 
-            override fun onAnimationRepeat(animation: Animation?) {}
-        })
-
-        placeCardToEndPos.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {}
-
-            override fun onAnimationEnd(animation: Animation?) {
+        placeCardToEndPos.setListener(
+            onEnd = {
                 itemView.startAnimation(flipCardToFrontAnimation)
             }
+        )
 
-            override fun onAnimationRepeat(animation: Animation?) {}
-        })
-
-        flipCardToFrontAnimation.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {
+        flipCardToFrontAnimation.setListener(
+            onStart = {
                 CoroutineScope(Dispatchers.Main + Job()).launch {
                     withContext(Dispatchers.IO) {
                         Thread.sleep(ANIMATION_DURATION / IMAGE_FADE_MULTIPLIER)
@@ -104,20 +97,17 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
                         }
                     }
                 }
-            }
-
-            override fun onAnimationEnd(animation: Animation?) {
+                      },
+            onEnd = {
                 binding.cardElixir.visibility = View.VISIBLE
                 binding.cardLvl.visibility = View.VISIBLE
                 binding.cardElixir.startAnimation(elixirFadeAnimation)
                 binding.cardLvl.startAnimation(elixirFadeAnimation)
             }
+        )
 
-            override fun onAnimationRepeat(animation: Animation?) {}
-        })
-
-        flipCardToBackAnimation.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation?) {
+        flipCardToBackAnimation.setListener(
+            onStart = {
                 CoroutineScope(Dispatchers.Main + Job()).launch {
                     withContext(Dispatchers.IO) {
                         Thread.sleep(ANIMATION_DURATION / IMAGE_FADE_MULTIPLIER)
@@ -128,14 +118,11 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
                         }
                     }
                 }
-            }
-
-            override fun onAnimationEnd(animation: Animation?) {
+                      },
+            onEnd = {
                 itemView.startAnimation(dropCardAnimation)
             }
-
-            override fun onAnimationRepeat(animation: Animation?) {}
-        })
+        )
 
         itemView.apply {
             binding.cardLvl.text = data.lvl.toString()
