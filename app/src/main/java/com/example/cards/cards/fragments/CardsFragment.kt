@@ -4,21 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.example.cards.R
 import com.example.cards.adapters.RecyclerViewAdapter
 import com.example.cards.adapters.SimpleItemTouchHelperCallback
 import com.example.cards.cards.factories.CardViewHolderFactory
+import com.example.cards.cards.viewholders.CardViewHolder
 import com.example.cards.cards.viewmodels.CardViewModel
 import com.example.cards.databinding.CardsFragmentBinding
 import com.example.cards.factories.ViewModelFactory
 import com.example.cards.models.Average
 import com.example.cards.models.Card
+import kotlinx.coroutines.*
 
 private const val SPAN_COUNT = 4
 
@@ -42,11 +41,9 @@ class CardsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.cardList.layoutManager = GridLayoutManager(context, SPAN_COUNT)
-        val clearAnimation: Animation =
-            AnimationUtils.loadAnimation(activity, R.anim.clear_deck_animation)
 
         binding.randomButton.setOnClickListener {
-            onRandomButtonClick(clearAnimation)
+            onRandomButtonClick()
         }
 
         adapter = RecyclerViewAdapter(
@@ -77,9 +74,18 @@ class CardsFragment : Fragment() {
         }
     }
 
-    private fun onRandomButtonClick(clearAnimation: Animation) {
+    private fun onRandomButtonClick() {
         viewModel.getNewShuffledData()
-        binding.cardList.startAnimation(clearAnimation)
+        CoroutineScope(Dispatchers.Main + Job()).launch {
+            withContext(Dispatchers.Default) {
+                (adapter.holderList as List<CardViewHolder>).forEach { card ->
+                    Thread.sleep(50)
+                    withContext(Dispatchers.Main) {
+                        card.startAnimation()
+                    }
+                }
+            }
+        }
     }
 
     private fun onCardClick(position: Int) {

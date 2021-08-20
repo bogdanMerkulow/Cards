@@ -2,17 +2,17 @@ package com.example.cards.adapters
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cards.adapters.ViewHolderFactory
 import com.example.cards.extections.swap
-import java.util.*
 
 class RecyclerViewAdapter<T>(
     private val viewHolderFactory: ViewHolderFactory<T>,
+    val holderList: MutableList<ViewHolder<T>> = mutableListOf()
 ) : RecyclerView.Adapter<ViewHolder<T>>(), ItemTouchHelperAdapter {
 
     private val items: MutableList<T> = mutableListOf()
 
     fun addItems(items: List<T>) {
+        holderList.clear()
         this.items.clear()
         this.items.addAll(items as MutableList<T>)
         notifyDataSetChanged()
@@ -31,6 +31,7 @@ class RecyclerViewAdapter<T>(
 
     override fun onBindViewHolder(holder: ViewHolder<T>, position: Int) {
         holder.bind(items[position])
+        holderList.add(holder)
     }
 
     override fun getItemCount(): Int {

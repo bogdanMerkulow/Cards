@@ -20,7 +20,8 @@ private const val CARD_BACKGROUND_SIZE = -1f
 private const val MINIMUM_SIZE = 0f
 private const val DEFAULT_POS_AND_SIZE = 1f
 private const val ANIMATION_DURATION = 1000L
-private const val BEYOND_SCREEN = 1200f
+private const val BEYOND_SCREEN = 1400f
+private const val DROP_ANIMATION = 1800L
 private const val START_POS_X = -210f
 private const val START_POS_Y = -225f
 
@@ -29,12 +30,20 @@ private fun createView(parent: ViewGroup): View = LayoutInflater.from(parent.con
 
 class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
     ViewHolder<Card>(createView(parent)) {
-
+    var startAnimation: () -> Unit = {}
     private val binding: CardItemBinding = CardItemBinding.bind(itemView)
 
     override fun bind(data: Card) {
         val endPodDivider = (adapterPosition + 1) * END_POS_DIVIDER
         val positionFrom = getPositionByAdapterPosition(adapterPosition)
+
+        val dropAnimation = AnimationHelper.getTranslateAnimation(
+            DEFAULT_POS_AND_SIZE, DEFAULT_POS_AND_SIZE,
+            DEFAULT_POS_AND_SIZE, BEYOND_SCREEN,
+            DROP_ANIMATION
+        )
+
+        startAnimation = { itemView.startAnimation(dropAnimation) }
 
         val setCardOnStartPosAnimation = AnimationHelper.getTranslateAnimation(
             positionFrom.x, positionFrom.x,
