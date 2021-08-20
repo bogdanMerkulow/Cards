@@ -3,9 +3,6 @@ package com.example.cards.cards.viewholders
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.ScaleAnimation
-import android.view.animation.TranslateAnimation
 import com.example.cards.R
 import com.example.cards.adapters.ViewHolder
 import com.example.cards.databinding.CardItemBinding
@@ -14,7 +11,7 @@ import com.example.cards.models.Card
 import com.example.cards.models.Position
 import kotlinx.coroutines.*
 
-private const val MAGIC_MULTIPLIER = 1.2f
+private const val END_POS_DIVIDER = 1.2f
 private const val IMAGE_FADE_MULTIPLIER = 2
 private const val ELIXIR_FADE_MULTIPLIER = 3
 private const val SECOND_ITEM_POS_MULTIPLIER = 2f
@@ -36,7 +33,7 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
     private val binding: CardItemBinding = CardItemBinding.bind(itemView)
 
     override fun bind(data: Card) {
-        val multiplier = (adapterPosition + 1) * MAGIC_MULTIPLIER
+        val endPodDivider = (adapterPosition + 1) * END_POS_DIVIDER
         val positionFrom = getPositionByAdapterPosition(adapterPosition)
 
         val setCardOnStartPosAnimation = AnimationHelper.getTranslateAnimation(
@@ -48,7 +45,7 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
         val placeCardToEndPos = AnimationHelper.getTranslateAnimation(
             positionFrom.x, DEFAULT_POS_AND_SIZE,
             positionFrom.y, DEFAULT_POS_AND_SIZE,
-            ((adapterPosition * ANIMATION_DURATION) / multiplier).toLong()
+            ((adapterPosition * ANIMATION_DURATION) / endPodDivider).toLong()
         )
 
         val flipCardToFrontAnimation = AnimationHelper.getScaleAnimation(
