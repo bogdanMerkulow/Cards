@@ -37,7 +37,7 @@ private fun createView(parent: ViewGroup): View = LayoutInflater.from(parent.con
 class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
     ViewHolder<Card>(createView(parent)) {
 
-    private val binding: CardItemBinding = CardItemBinding.bind(parent)
+    private val binding: CardItemBinding = CardItemBinding.bind(itemView)
 
     override fun bind(data: Card) {
         val multiplier = (adapterPosition + 1) * MAGIC_MULTIPLIER
