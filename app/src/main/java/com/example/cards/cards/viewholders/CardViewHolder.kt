@@ -42,7 +42,8 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
 
         val setCardOnStartPosAnimation = getTranslateAnimation(
             positionFrom.x, positionFrom.x,
-            positionFrom.y, positionFrom.y, ANIMATION_DURATION
+            positionFrom.y, positionFrom.y,
+            ANIMATION_DURATION
         )
 
         val placeCardToEndPos = getTranslateAnimation(
@@ -97,7 +98,7 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
                         }
                     }
                 }
-                      },
+            },
             onEnd = {
                 binding.cardElixir.visibility = View.VISIBLE
                 binding.cardLvl.visibility = View.VISIBLE
@@ -118,7 +119,7 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
                         }
                     }
                 }
-                      },
+            },
             onEnd = {
                 itemView.startAnimation(dropCardAnimation)
             }
@@ -147,7 +148,8 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
         toX: Float,
         fromY: Float,
         toY: Float,
-        duration: Long): ScaleAnimation {
+        duration: Long
+    ): ScaleAnimation {
         return ScaleAnimation(
             fromX, toX,
             fromY, toY,

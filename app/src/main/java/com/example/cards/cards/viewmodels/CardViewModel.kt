@@ -55,11 +55,13 @@ class CardViewModel(private val context: Context) : ViewModel() {
             _loadedComplete.postValue(View.INVISIBLE)
             _readyToNewData.postValue(false)
 
-            val iconsList = getRandomNumbersList().map { context.resources.getIdentifier(
-                "$ICON_PREFIX$it",
-                DEF_TYPE,
-                context.packageName
-            ) }
+            val iconsList = getRandomNumbersList().map {
+                context.resources.getIdentifier(
+                    "$ICON_PREFIX$it",
+                    DEF_TYPE,
+                    context.packageName
+                )
+            }
 
             val cards = iconsList.map { icon ->
                 val cardLvl = Random.nextInt(MIN_LVL_RARE, MAX_LVL_RARE)
