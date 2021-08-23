@@ -2,7 +2,6 @@ package com.example.cards.cards.viewmodels
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,8 +13,6 @@ import com.example.cards.models.Card
 import com.example.cards.models.NewCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.math.ceil
-import kotlin.math.floor
 import kotlin.math.round
 import kotlin.random.Random
 
