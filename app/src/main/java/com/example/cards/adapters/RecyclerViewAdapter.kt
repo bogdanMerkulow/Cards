@@ -3,6 +3,7 @@ package com.example.cards.adapters
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cards.extections.swap
+import java.util.*
 
 class RecyclerViewAdapter<T>(
     private val viewHolderFactory: ViewHolderFactory<T>,
@@ -39,14 +40,18 @@ class RecyclerViewAdapter<T>(
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
-        items.swap(fromPosition, toPosition)
-        holderList.swap(fromPosition, toPosition)
-
-        holderList[fromPosition].bindWithOutAnimation(items[fromPosition])
-        holderList[toPosition].bindWithOutAnimation(items[toPosition])
-
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                items.swap(i, i + 1)
+                holderList.swap(i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                items.swap(i, i - 1)
+                holderList.swap(i, i - 1)
+            }
+        }
         notifyItemMoved(fromPosition, toPosition)
-
         return true
     }
 }
