@@ -31,6 +31,7 @@ private fun createView(parent: ViewGroup): View = LayoutInflater.from(parent.con
 class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
     ViewHolder<Card>(createView(parent)) {
     var startAnimation: () -> Unit = {}
+    var newCardAnimation: () -> Unit = {}
     private val binding: CardItemBinding = CardItemBinding.bind(itemView)
 
     override fun bind(data: Card) {
@@ -144,9 +145,10 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
         }
 
         with(itemView) {
+            newCardAnimation = { startAnimation(flipCardToBackAnimation) }
+            
             setOnClickListener {
                 listener(adapterPosition)
-                itemView.startAnimation(flipCardToBackAnimation)
             }
 
             setOnLongClickListener { false }

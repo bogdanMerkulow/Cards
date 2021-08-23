@@ -26,6 +26,7 @@ class CardsFragment : Fragment() {
     private lateinit var adapter: RecyclerViewAdapter<Card>
     private var _binding: CardsFragmentBinding? = null
     private val binding get() = _binding!!
+    private var ready = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +66,7 @@ class CardsFragment : Fragment() {
             }
 
             readyToNewData.observe(viewLifecycleOwner) { ready ->
+                this@CardsFragment.ready = ready
                 binding.randomButton.isEnabled = ready
             }
 
@@ -89,7 +91,10 @@ class CardsFragment : Fragment() {
     }
 
     private fun onCardClick(position: Int) {
-        viewModel.getRandomUniqueCard(position)
+        if (ready) {
+            (adapter.holderList as List<CardViewHolder>)[position].newCardAnimation()
+            viewModel.getRandomUniqueCard(position)
+        }
     }
 
     private fun setAverage(average: Average) {
