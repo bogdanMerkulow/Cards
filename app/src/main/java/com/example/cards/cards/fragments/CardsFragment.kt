@@ -67,9 +67,7 @@ class CardsFragment : Fragment() {
                 binding.costLine.visibility = visibility
             }
 
-            readyToNewData.observe(viewLifecycleOwner) { ready ->
-                onChangeReady(ready)
-            }
+            readyToNewData.observe(viewLifecycleOwner, ::onChangeReady)
 
             newCard.observe(viewLifecycleOwner) { newCard ->
                 adapter.replaceItem(newCard.card, newCard.position)
