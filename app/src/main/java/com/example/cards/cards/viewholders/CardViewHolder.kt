@@ -16,7 +16,7 @@ private const val IMAGE_FADE_MULTIPLIER = 2
 private const val ELIXIR_FADE_MULTIPLIER = 3
 private const val SECOND_ITEM_POS_MULTIPLIER = 2f
 private const val THIRD_ITEM_POS_MULTIPLIER = 3f
-private const val DROP_MULTIPLIER = 90L
+private const val DROP_MULTIPLIER = 120L
 private const val CARD_BACKGROUND_SIZE = -1f
 private const val MINIMUM_SIZE = 0f
 private const val DEFAULT_POS_AND_SIZE = 1f
@@ -41,7 +41,7 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
     override fun bind(data: Card) {
         val positionFrom = getPositionByAdapterPosition(adapterPosition)
         endPodDivider = (adapterPosition + 1) * END_POS_DIVIDER
-        dropAnimationTime = DROP_ANIMATION - (adapterPosition * DROP_MULTIPLIER)
+        dropAnimationTime = DROP_ANIMATION + (adapterPosition * DROP_MULTIPLIER)
         placeCardToEndPosAnimationTime = ((adapterPosition * ANIMATION_DURATION) / endPodDivider).toLong()
 
         val dropAnimation = AnimationHelper.getTranslateAnimation(
