@@ -1,6 +1,7 @@
 package com.example.cards.cards.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,7 @@ class CardsFragment : Fragment() {
     private val viewModel: CardViewModel by viewModels(factoryProducer = { ViewModelFactory() })
     private lateinit var adapter: RecyclerViewAdapter<Card>
     private var _binding: CardsFragmentBinding? = null
+    private var touchHelper: ItemTouchHelper? = null
     private val binding get() = _binding!!
     private var ready = false
 
@@ -53,8 +55,8 @@ class CardsFragment : Fragment() {
 
         binding.cardList.adapter = adapter
 
-        val touchHelper = ItemTouchHelper(SimpleItemTouchHelperCallback(adapter))
-        touchHelper.attachToRecyclerView(binding.cardList)
+        touchHelper = ItemTouchHelper(SimpleItemTouchHelperCallback(adapter))
+        touchHelper?.attachToRecyclerView(binding.cardList)
 
         with(viewModel) {
             data.observe(viewLifecycleOwner, adapter::addItems)
@@ -66,8 +68,7 @@ class CardsFragment : Fragment() {
             }
 
             readyToNewData.observe(viewLifecycleOwner) { ready ->
-                this@CardsFragment.ready = ready
-                binding.randomButton.isEnabled = ready
+                onChangeReady(ready)
             }
 
             newCard.observe(viewLifecycleOwner) { newCard ->
@@ -104,6 +105,18 @@ class CardsFragment : Fragment() {
             averageCostTitle.setTextColor(average.rareColor)
             averageElixir.setImageResource(average.elixir)
         }
+    }
+
+    private fun onChangeReady(ready: Boolean) {
+        this@CardsFragment.ready = ready
+
+        if (ready) {
+            touchHelper?.attachToRecyclerView(binding.cardList)
+        } else {
+            touchHelper?.attachToRecyclerView(null)
+        }
+
+        binding.randomButton.isEnabled = ready
     }
 
     override fun onDestroyView() {

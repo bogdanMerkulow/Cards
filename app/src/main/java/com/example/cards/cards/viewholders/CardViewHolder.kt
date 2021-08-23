@@ -157,6 +157,14 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
         }
     }
 
+    override fun bindWithOutAnimation(data: Card) {
+        with(itemView) {
+            setOnClickListener {
+                listener(adapterPosition)
+            }
+        }
+    }
+
     private fun getPositionByAdapterPosition(adapterPosition: Int): Position {
         return when (adapterPosition) {
             0 -> Position(DEFAULT_POS_AND_SIZE - adapterPosition,DEFAULT_POS_AND_SIZE - adapterPosition)

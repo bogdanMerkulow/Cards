@@ -6,9 +6,9 @@ import com.example.cards.extections.swap
 
 class RecyclerViewAdapter<T>(
     private val viewHolderFactory: ViewHolderFactory<T>,
-    val holderList: MutableList<ViewHolder<T>> = mutableListOf()
 ) : RecyclerView.Adapter<ViewHolder<T>>(), ItemTouchHelperAdapter {
 
+    val holderList: MutableList<ViewHolder<T>> = mutableListOf()
     private val items: MutableList<T> = mutableListOf()
 
     fun addItems(items: List<T>) {
@@ -22,7 +22,6 @@ class RecyclerViewAdapter<T>(
         items.removeAt(pos)
         holderList.removeAt(pos)
         items.add(pos, item)
-
         notifyItemChanged(pos)
     }
 
@@ -41,8 +40,13 @@ class RecyclerViewAdapter<T>(
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         items.swap(fromPosition, toPosition)
+        holderList.swap(fromPosition, toPosition)
+
+        holderList[fromPosition].bindWithOutAnimation(items[fromPosition])
+        holderList[toPosition].bindWithOutAnimation(items[toPosition])
 
         notifyItemMoved(fromPosition, toPosition)
+
         return true
     }
 }
