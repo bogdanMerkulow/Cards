@@ -77,15 +77,8 @@ class CardsFragment : Fragment() {
 
     private fun onRandomButtonClick() {
         viewModel.getNewShuffledData()
-        CoroutineScope(Dispatchers.Main + Job()).launch {
-            withContext(Dispatchers.Default) {
-                (adapter.holderList as List<CardViewHolder>).forEach { card ->
-                    Thread.sleep(50)
-                    withContext(Dispatchers.Main) {
-                        card.startAnimation()
-                    }
-                }
-            }
+        (adapter.holderList as List<CardViewHolder>).forEach { card ->
+            card.startAnimation()
         }
     }
 

@@ -16,6 +16,7 @@ private const val IMAGE_FADE_MULTIPLIER = 2
 private const val ELIXIR_FADE_MULTIPLIER = 3
 private const val SECOND_ITEM_POS_MULTIPLIER = 2f
 private const val THIRD_ITEM_POS_MULTIPLIER = 3f
+private const val DROP_MULTIPLIER = 90L
 private const val CARD_BACKGROUND_SIZE = -1f
 private const val MINIMUM_SIZE = 0f
 private const val DEFAULT_POS_AND_SIZE = 1f
@@ -32,16 +33,21 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
     ViewHolder<Card>(createView(parent)) {
     var startAnimation: () -> Unit = {}
     var newCardAnimation: () -> Unit = {}
+    private var endPodDivider = 0f
+    private var dropAnimationTime = 0L
+    private var placeCardToEndPosAnimationTime = 0L
     private val binding: CardItemBinding = CardItemBinding.bind(itemView)
 
     override fun bind(data: Card) {
-        val endPodDivider = (adapterPosition + 1) * END_POS_DIVIDER
         val positionFrom = getPositionByAdapterPosition(adapterPosition)
+        endPodDivider = (adapterPosition + 1) * END_POS_DIVIDER
+        dropAnimationTime = DROP_ANIMATION - (adapterPosition * DROP_MULTIPLIER)
+        placeCardToEndPosAnimationTime = ((adapterPosition * ANIMATION_DURATION) / endPodDivider).toLong()
 
         val dropAnimation = AnimationHelper.getTranslateAnimation(
             DEFAULT_POS_AND_SIZE, DEFAULT_POS_AND_SIZE,
             DEFAULT_POS_AND_SIZE, BEYOND_SCREEN,
-            DROP_ANIMATION
+            dropAnimationTime
         )
 
         startAnimation = { itemView.startAnimation(dropAnimation) }
@@ -55,7 +61,7 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
         val placeCardToEndPos = AnimationHelper.getTranslateAnimation(
             positionFrom.x, DEFAULT_POS_AND_SIZE,
             positionFrom.y, DEFAULT_POS_AND_SIZE,
-            ((adapterPosition * ANIMATION_DURATION) / endPodDivider).toLong()
+            placeCardToEndPosAnimationTime
         )
 
         val flipCardToFrontAnimation = AnimationHelper.getScaleAnimation(
