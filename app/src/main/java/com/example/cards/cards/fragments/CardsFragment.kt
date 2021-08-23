@@ -1,5 +1,8 @@
 package com.example.cards.cards.fragments
 
+import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -103,8 +106,10 @@ class CardsFragment : Fragment() {
 
         if (ready) {
             touchHelper?.attachToRecyclerView(binding.cardList)
+            (adapter.holderList as List<CardViewHolder>).map { it.itemView.alpha = 1f }
         } else {
             touchHelper?.attachToRecyclerView(null)
+            (adapter.holderList as List<CardViewHolder>).map { it.itemView.alpha = 0.8f }
         }
 
         binding.randomButton.isEnabled = ready
