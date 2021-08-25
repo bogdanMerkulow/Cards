@@ -22,10 +22,15 @@ private const val TIME_TO_DROP_CARD = 2400L
 private const val TIME_TO_END_ANIMATION = 3200L
 private const val DEF_TYPE = "drawable"
 private const val ICON_PREFIX: String = "icon"
+private const val FIRST_ICON_ID = 1
 private const val ICONS_COUNT: Int = 82
 private const val CARDS_COUNT: Int = 8
 private const val MIN_LVL_RARE: Int = 1
 private const val MAX_LVL_RARE: Int = 11
+private val COMMON_RARE_RANGE = 1..2
+private val RARE_RARE_RANGE = 3..4
+private val EPIC_RARE_RANGE = 5..6
+private val LEGENDARY_RARE_RANGE = 7..10
 
 class CardViewModel(private val context: Context) : ViewModel() {
     private val _data: MutableLiveData<List<Card>> = MutableLiveData<List<Card>>()
@@ -89,7 +94,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
         val numberList = mutableSetOf<Int>()
 
         for (i in (ICONS_COUNT - (CARDS_COUNT - 1))..ICONS_COUNT) {
-            val number = Random.nextInt(1, i)
+            val number = Random.nextInt(FIRST_ICON_ID, i)
 
             if (numberList.contains(number))
                 numberList.add(i)
@@ -101,7 +106,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
     }
 
     private tailrec fun randomCard(): Int {
-        val randomIcon = Random.nextInt(1, ICONS_COUNT)
+        val randomIcon = Random.nextInt(FIRST_ICON_ID, ICONS_COUNT)
 
         val iconId = context.resources.getIdentifier(
             "$ICON_PREFIX$randomIcon",
@@ -153,20 +158,20 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
     private fun getRare(value: Int): Int {
         return when (value) {
-            in 1..2 -> R.drawable.elixir_common
-            in 3..4 -> R.drawable.elixir_rare
-            in 5..6 -> R.drawable.elixir_epic
-            in 7..10 -> R.drawable.elixir_legendary
+            in COMMON_RARE_RANGE -> R.drawable.elixir_common
+            in RARE_RARE_RANGE -> R.drawable.elixir_rare
+            in EPIC_RARE_RANGE -> R.drawable.elixir_epic
+            in LEGENDARY_RARE_RANGE -> R.drawable.elixir_legendary
             else -> throw IndexOutOfBoundsException("elixir id: $value not found")
         }
     }
 
     private fun getRareColor(value: Int): Int {
         return when (value) {
-            in 1..2 -> Color.GRAY
-            in 3..4 -> Color.YELLOW
-            in 5..6 -> Color.MAGENTA
-            in 7..10 -> Color.CYAN
+            in COMMON_RARE_RANGE -> Color.GRAY
+            in RARE_RARE_RANGE -> Color.YELLOW
+            in EPIC_RARE_RANGE -> Color.MAGENTA
+            in LEGENDARY_RARE_RANGE -> Color.CYAN
             else -> throw IndexOutOfBoundsException("color id: $value not found")
         }
     }

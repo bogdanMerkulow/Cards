@@ -20,6 +20,8 @@ import com.example.cards.models.Card
 import kotlinx.coroutines.*
 
 private const val SPAN_COUNT = 4
+private const val FULL_ALPHA = 1f
+private const val LOW_ALPHA = 0.8f
 
 class CardsFragment : Fragment() {
     private val viewModel: CardViewModel by viewModels(factoryProducer = { ViewModelFactory() })
@@ -102,10 +104,10 @@ class CardsFragment : Fragment() {
 
         if (ready) {
             touchHelper?.attachToRecyclerView(binding.cardList)
-            (adapter.holderList as List<CardViewHolder>).map { it.itemView.alpha = 1f }
+            (adapter.holderList as List<CardViewHolder>).map { it.itemView.alpha = FULL_ALPHA }
         } else {
             touchHelper?.attachToRecyclerView(null)
-            (adapter.holderList as List<CardViewHolder>).map { it.itemView.alpha = 0.8f }
+            (adapter.holderList as List<CardViewHolder>).map { it.itemView.alpha = LOW_ALPHA }
         }
 
         binding.randomButton.isEnabled = ready
