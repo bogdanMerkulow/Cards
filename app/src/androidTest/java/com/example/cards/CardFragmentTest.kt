@@ -1,27 +1,95 @@
 package com.example.cards
 
-import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.action.ViewActions.click
-import android.support.test.espresso.assertion.ViewAssertions.matches
-import android.support.test.espresso.matcher.ViewMatchers.*
+import android.view.MotionEvent
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.UiController
+import androidx.test.espresso.ViewAction
+import androidx.test.espresso.ViewAssertion
+import androidx.test.espresso.action.MotionEvents
+import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers.*
+import org.hamcrest.Matcher
+import org.hamcrest.Matchers
 import org.junit.Before
 import org.junit.Test
+
+
+private const val TIME_TO_LOAD_CARDS = 4600L
+private const val TIME_TO_CHANGE_CARD = 2600L
 
 class CardFragmentTest {
 
     @Before
     fun setup() {
         ActivityScenario.launch(MainActivity::class.java)
+        onView(withId(R.id.random_button)).perform(click())
+        Thread.sleep(TIME_TO_LOAD_CARDS)
+    }
+
+    /*@Test
+    fun clickRandomDeckButton() {
+        onView(withId(R.id.card_list))
+            .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+            .check(matches(isDisplayed()))
+
+        onView(withId(R.id.random_button)).check(matches(isNotEnabled()))
+
+        Thread.sleep(TIME_TO_LOAD_CARDS)
+
+        onView(withId(R.id.random_button)).check(matches(isEnabled()))
+
+        onView(withId(R.id.card_list))
+            .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+            .check(matches(isDisplayed()))
+
+        onView(withId(R.id.random_button)).check(matches(isNotEnabled()))
     }
 
     @Test
-    fun clickRandomDeckButton() {
-        onView(withId(R.id.random_button)).perform(click())
-        Thread.sleep(3600)
-        onView(withId(R.id.card_elixir)).check(matches(isDisplayed()))
-        onView(withId(R.id.card_image)).check(matches(isDisplayed()))
-        onView(withId(R.id.card_list)).check(matches(isDisplayed()))
-        onView(withId(R.id.card_lvl)).check(matches(isDisplayed()))
+    fun changeCards() {
+        for (i in 0..7) {
+            onView(withId(R.id.card_list))
+                .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(i, click()))
+            Thread.sleep(TIME_TO_CHANGE_CARD)
+        }
+    }*/
+
+    @Test
+    fun dragAndDrop() {
+        onView(withId(R.id.card_list))
+            .perform(dragAndMoveRight(100f, 1f))
+    }
+
+    private fun dragAndMoveRight(x: Float, y: Float): ViewAction {
+        return object : ViewAction {
+            override fun getConstraints(): Matcher<View>  =
+                Matchers.allOf(
+                    isAssignableFrom(RecyclerView::class.java),
+                    isDisplayed()
+                )
+
+            override fun getDescription(): String = String()
+
+            override fun perform(uiController: UiController, view: View) {
+                val location = IntArray(2)
+                view.getLocationOnScreen(location)
+
+                val coordinates = floatArrayOf(x + location[0], y + location[1])
+                val toCoordinates = floatArrayOf(x + location[0] + 450f, y + location[1])
+                val precision = floatArrayOf(1f, 1f)
+
+                val down: MotionEvent = MotionEvents.sendDown(uiController, coordinates, precision).down
+                uiController.loopMainThreadForAtLeast(2000)
+                MotionEvents.sendDown(uiController, coordinates, precision).longPress
+                MotionEvents.sendMovement(uiController, down, toCoordinates)
+                MotionEvents.sendUp(uiController, down, coordinates)
+                uiController.loopMainThreadForAtLeast(2000)
+            }
+        }
     }
 }
