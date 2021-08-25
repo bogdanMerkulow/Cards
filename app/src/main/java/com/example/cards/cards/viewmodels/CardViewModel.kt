@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.cards.R
 import com.example.cards.models.Average
 import com.example.cards.models.Card
-import com.example.cards.models.NewCard
+import com.example.cards.models.ReplacementCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -37,7 +37,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
     private val _loadedComplete: MutableLiveData<Int> = MutableLiveData<Int>()
     private val _averageCost: MutableLiveData<Average> = MutableLiveData<Average>()
     private val _readyToNewData: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
-    private val _newCard: MutableLiveData<NewCard> = MutableLiveData<NewCard>()
+    private val _replacementCard: MutableLiveData<ReplacementCard> = MutableLiveData<ReplacementCard>()
     private val currentCardsSet: MutableList<Card> = mutableListOf()
 
     val data: LiveData<List<Card>>
@@ -52,8 +52,8 @@ class CardViewModel(private val context: Context) : ViewModel() {
     val readyToNewData: LiveData<Boolean>
         get() = _readyToNewData
 
-    val newCard: LiveData<NewCard>
-        get() = _newCard
+    val replacementCard: LiveData<ReplacementCard>
+        get() = _replacementCard
 
     fun getNewShuffledData() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -127,7 +127,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
             val cardLvl = Random.nextInt(MIN_LVL_RARE, MAX_LVL_RARE)
             val elixir = getRareIcon(cardLvl)
-            val newCard = NewCard(Card(elixir, cardLvl, iconId), position)
+            val newCard = ReplacementCard(Card(elixir, cardLvl, iconId), position)
 
             with(currentCardsSet) {
                 removeAt(position)
@@ -139,7 +139,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
             delay(TIME_TO_DROP_CARD)
 
             _averageCost.postValue(average)
-            _newCard.postValue(newCard)
+            _replacementCard.postValue(newCard)
 
             delay(TIME_TO_END_ANIMATION)
 
