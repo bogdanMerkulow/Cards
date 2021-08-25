@@ -71,7 +71,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
             val cards = iconsList.map { icon ->
                 val cardLvl = Random.nextInt(MIN_LVL_RARE, MAX_LVL_RARE)
-                val elixir = getRare(cardLvl)
+                val elixir = getRareIcon(cardLvl)
 
                 Card(elixir, cardLvl, icon)
             }
@@ -126,7 +126,7 @@ class CardViewModel(private val context: Context) : ViewModel() {
             val iconId = randomCard()
 
             val cardLvl = Random.nextInt(MIN_LVL_RARE, MAX_LVL_RARE)
-            val elixir = getRare(cardLvl)
+            val elixir = getRareIcon(cardLvl)
             val newCard = NewCard(Card(elixir, cardLvl, iconId), position)
 
             with(currentCardsSet) {
@@ -150,13 +150,13 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
     private fun getAverage(cards: List<Card>): Average {
         val cost = round((cards.map { it.lvl }.average())).toInt()
-        val rare = getRare(cost)
+        val rare = getRareIcon(cost)
         val rareColor = getRareColor(cost)
 
         return Average(cost, rare, rareColor)
     }
 
-    private fun getRare(value: Int): Int {
+    private fun getRareIcon(value: Int): Int {
         return when (value) {
             in COMMON_RARE_RANGE -> R.drawable.elixir_common
             in RARE_RARE_RANGE -> R.drawable.elixir_rare
