@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import com.example.cards.R
 import com.example.cards.adapters.ViewHolder
 import com.example.cards.databinding.CardItemBinding
-import com.example.cards.extections.setListener
+import com.example.cards.extenctions.setListener
 import com.example.cards.models.Card
 import com.example.cards.models.Position
 import kotlinx.coroutines.*

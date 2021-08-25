@@ -2,7 +2,7 @@ package com.example.cards.adapters
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cards.extections.swap
+import com.example.cards.extenctions.swap
 
 class RecyclerViewAdapter<T>(
     private val viewHolderFactory: ViewHolderFactory<T>,

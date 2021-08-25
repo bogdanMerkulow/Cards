@@ -1,4 +1,4 @@
-package com.example.cards.extections
+package com.example.cards.extenctions
 
 import android.view.animation.Animation
 
