@@ -104,7 +104,7 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
             onStart = {
                 CoroutineScope(Dispatchers.Main + Job()).launch {
                     withContext(Dispatchers.IO) {
-                        Thread.sleep(ANIMATION_DURATION / IMAGE_FADE_MULTIPLIER)
+                        delay(ANIMATION_DURATION / IMAGE_FADE_MULTIPLIER)
                         withContext(Dispatchers.Main) {
                             binding.cardImage.setImageResource(data.image)
                         }
@@ -126,7 +126,7 @@ class CardViewHolder(parent: ViewGroup, private val listener: (Int) -> Unit) :
             onStart = {
                 CoroutineScope(Dispatchers.Main + Job()).launch {
                     withContext(Dispatchers.IO) {
-                        Thread.sleep(ANIMATION_DURATION / IMAGE_FADE_MULTIPLIER)
+                        delay(ANIMATION_DURATION / IMAGE_FADE_MULTIPLIER)
                         withContext(Dispatchers.Main) {
                             with(binding) {
                                 cardLvl.text = null

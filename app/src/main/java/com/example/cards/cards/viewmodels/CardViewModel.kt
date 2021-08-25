@@ -12,6 +12,7 @@ import com.example.cards.models.Average
 import com.example.cards.models.Card
 import com.example.cards.models.NewCard
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.round
 import kotlin.random.Random
@@ -72,12 +73,12 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
             val average = getAverage(cards)
 
-            Thread.sleep(START_DELAY)
+            delay(START_DELAY)
 
             currentCardsSet.addAll(cards)
             _data.postValue(cards)
 
-            Thread.sleep(TIME_TO_END_ANIMATION)
+            delay(TIME_TO_END_ANIMATION)
             _averageCost.postValue(average)
             _readyToNewData.postValue(true)
             _loadedComplete.postValue(View.VISIBLE)
@@ -130,12 +131,12 @@ class CardViewModel(private val context: Context) : ViewModel() {
 
             val average = getAverage(currentCardsSet)
 
-            Thread.sleep(TIME_TO_DROP_CARD)
+            delay(TIME_TO_DROP_CARD)
 
             _averageCost.postValue(average)
             _newCard.postValue(newCard)
 
-            Thread.sleep(TIME_TO_END_ANIMATION)
+            delay(TIME_TO_END_ANIMATION)
 
             _readyToNewData.postValue(true)
             _loadedComplete.postValue(View.VISIBLE)
