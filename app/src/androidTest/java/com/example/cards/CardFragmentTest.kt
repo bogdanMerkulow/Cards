@@ -31,7 +31,7 @@ class CardFragmentTest {
         Thread.sleep(TIME_TO_LOAD_CARDS)
     }
 
-    /*@Test
+    @Test
     fun clickRandomDeckButton() {
         onView(withId(R.id.card_list))
             .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
@@ -57,7 +57,7 @@ class CardFragmentTest {
                 .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(i, click()))
             Thread.sleep(TIME_TO_CHANGE_CARD)
         }
-    }*/
+    }
 
     @Test
     fun dragAndDrop() {
