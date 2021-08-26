@@ -1,5 +1,6 @@
 package com.example.cards
 
+import android.graphics.*
 import android.view.MotionEvent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
@@ -7,7 +8,6 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.action.MotionEvents
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -15,6 +15,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
@@ -32,7 +33,7 @@ class CardFragmentTest {
     }
 
     @Test
-    fun clickRandomDeckButton() {
+    fun randomDeckButton() {
         onView(withId(R.id.card_list))
             .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
             .check(matches(isDisplayed()))
@@ -43,11 +44,12 @@ class CardFragmentTest {
 
         onView(withId(R.id.random_button)).check(matches(isEnabled()))
 
-        onView(withId(R.id.card_list))
-            .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
-            .check(matches(isDisplayed()))
+        onView(withId(R.id.random_button)).perform(click())
 
-        onView(withId(R.id.random_button)).check(matches(isNotEnabled()))
+        Thread.sleep(TIME_TO_LOAD_CARDS)
+
+        onView(withId(R.id.random_button)).check(matches(isEnabled()))
+
     }
 
     @Test
@@ -62,10 +64,20 @@ class CardFragmentTest {
     @Test
     fun dragAndDrop() {
         onView(withId(R.id.card_list))
-            .perform(dragAndMoveRight(100f, 1f))
+            .perform(dragAndMoveRightAndAssertMove(100f, 1f))
     }
 
-    private fun dragAndMoveRight(x: Float, y: Float): ViewAction {
+    private fun createScreenShot(view: View): Bitmap {
+        val bitmap = Bitmap.createBitmap(
+            view.width,
+            view.height, Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        view.draw(canvas)
+        return bitmap
+    }
+
+    private fun dragAndMoveRightAndAssertMove(x: Float, y: Float): ViewAction {
         return object : ViewAction {
             override fun getConstraints(): Matcher<View>  =
                 Matchers.allOf(
@@ -78,6 +90,7 @@ class CardFragmentTest {
             override fun perform(uiController: UiController, view: View) {
                 val location = IntArray(2)
                 view.getLocationOnScreen(location)
+                val screenShotBefore = createScreenShot(view).getPixel(view.x.toInt(), view.y.toInt())
 
                 val coordinates = floatArrayOf(x + location[0], y + location[1])
                 val toCoordinates = floatArrayOf(x + location[0] + 450f, y + location[1])
@@ -88,7 +101,10 @@ class CardFragmentTest {
                 MotionEvents.sendDown(uiController, coordinates, precision).longPress
                 MotionEvents.sendMovement(uiController, down, toCoordinates)
                 MotionEvents.sendUp(uiController, down, coordinates)
-                uiController.loopMainThreadForAtLeast(2000)
+
+                val screenShotAfter = createScreenShot(view).getPixel(view.x.toInt(), view.y.toInt())
+
+                Assert.assertNotEquals(screenShotBefore, screenShotAfter)
             }
         }
     }
